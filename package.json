@@ -16,7 +16,9 @@
     "type": "git",
     "url": "git@github.com:eea/volto-addon-template.git"
   },
-  "dependencies": {},
+  "dependencies": {
+      "friendly-challenge": "^0.9.9",
+  },
   "devDependencies": {
     "@plone/scripts": "*",
     "@cypress/code-coverage": "^3.10.0",
