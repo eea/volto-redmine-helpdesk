@@ -17,7 +17,7 @@
     "url": "git@github.com:eea/volto-redmine-helpdesk.git"
   },
   "dependencies": {
-      "friendly-challenge": "^0.9.9",
+      "friendly-challenge": "^0.9.9"
   },
   "devDependencies": {
     "@plone/scripts": "*",
