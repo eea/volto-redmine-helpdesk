@@ -1,7 +1,6 @@
 import React from 'react';
 import { RedmineHelpdeskWidgetFactory } from './widget';
-import { WidgetInstance } from "friendly-challenge";
-
+import "../captcha/widget";
 
 const HelpdeskView = (props) => {
 
@@ -30,17 +29,19 @@ const HelpdeskView = (props) => {
         attachment: false
     });
 
-    if (widget_button !== null) {
-      widget_button.click();
-      widget_button.style.display = "none";
-    }
+    // if (widget_button !== null) {
+    //   widget_button.click();
+    //   widget_button.style.display = "none";
+    // }
+    redmineWidget.toggle();
 
     const captcha = document.querySelector(".frc-captcha");
     const options = {
-        sitekey: ""
+        sitekey: "FCMR3DVP81RFD3ML"
     }
+    const WidgetInstance = window.friendlyChallenge.WidgetInstance
     const captcha_widget = new WidgetInstance(captcha, options);
-    // captcha_widget.start();
+    captcha_widget.start();
 
     // add code from button click
     setTimeout(() => {
@@ -145,6 +146,7 @@ const HelpdeskView = (props) => {
       <>
         <div className="frc-captcha"></div>
         <div id="helpdesk_widget"></div>
+        <button id="widget_button"></button>
       </>
     );
 };

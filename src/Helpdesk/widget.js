@@ -1,4 +1,5 @@
-/* eslint-disable */
+import iframeExt from './helpdesk_widget/iframe.ext';
+import load_formExt from './helpdesk_widget/load_form.json';
 
 function getXmlHttp(){
   var xmlhttp;
@@ -93,7 +94,8 @@ export const RedmineHelpdeskWidgetFactory = ({widget_button}) => {
       this.loading_div.style.display = 'block';
       this.widget_button.style.display = 'none';
       var xmlhttp = getXmlHttp();
-      xmlhttp.open('GET', this.base_url + '/helpdesk_widget/load_form.json', true);
+      // xmlhttp.open('GET', this.base_url + '/helpdesk_widget/load_form.json', true);
+      xmlhttp.open('GET', load_formExt, true);
       xmlhttp.responseType = 'json';
       xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState === 4) {
@@ -163,8 +165,10 @@ export const RedmineHelpdeskWidgetFactory = ({widget_button}) => {
       this.iframe = document.createElement('iframe');
       this.iframe.style.opacity = '0';
       this.widget.appendChild(this.iframe);
+        debugger;
 
       this.iframe.onload = function() {
+        debugger;
         api.decorate_iframe();
       }
     },
@@ -267,6 +271,7 @@ export const RedmineHelpdeskWidgetFactory = ({widget_button}) => {
     },
     apply_animation: function(){
       const animation_css = document.createElement('link');
+      // animation_css.href = this.base_url + '/helpdesk_widget/animation.css';
       animation_css.href = this.base_url + '/helpdesk_widget/animation.css';
       animation_css.rel = "stylesheet";
       animation_css.type = "text/css";
@@ -289,7 +294,8 @@ export const RedmineHelpdeskWidgetFactory = ({widget_button}) => {
     append_scripts: function(){
       const script = document.createElement('script');
       script.type = 'text/javascript';
-      script.src = this.base_url + '/helpdesk_widget/iframe.js';
+      // script.src = this.base_url + '/helpdesk_widget/iframe.ext';
+      script.src = iframeExt;
       console.log('script element', script, this.iframe);
       this.iframe.contentWindow.document.head.appendChild(script);
 
