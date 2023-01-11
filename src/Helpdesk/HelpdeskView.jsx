@@ -6,20 +6,20 @@ const HelpdeskView = (props) => {
   React.useEffect(() => {
     const widget_button = document.getElementById('widget_button');
     const redmineWidget = RedmineHelpdeskWidgetFactory({ widget_button });
+    console.log(props);
 
     redmineWidget.load();
-
     redmineWidget.config({
       color: '#004B87',
       translation: {
-        nameLabel: 'Enter your name here (Optional)',
-        emailLabel: 'Please put your email here',
-        descriptionLabel: 'What question do you have?',
-        createButtonLabel: 'Submit question',
-        createSuccessDescription: 'Thank you for your question!',
-        createErrorLabel: 'Something went wrong :(...',
-        subjectLabel: 'Subject',
-        createSuccessLabel: 'Your question was successfully created',
+        nameLabel: props.data.nameLabel ? props.data.nameLabel : 'Enter your name here (Optional)',
+        emailLabel: props.data.emailLabel ? props.data.emailLabel : 'Please put your email here',
+        descriptionLabel: props.data.descriptionLabel ? props.data.descriptionLabel : 'What question do you have?',
+        createButtonLabel: props.data.submitLabel ? props.data.submitLabel : 'Submit question',
+        createSuccessDescription: props.data.successDescriptionLabel ? props.data.successDescriptionLabel : 'Thank you for your question!',
+        createErrorLabel: props.data.errorLabel ? props.data.errorLabel : 'Something went wrong :(...',
+        subjectLabel: props.data.subjectLabel ? props.data.subjectLabel : 'Subject',
+        createSuccessLabel: props.data.successLabel ? props.data.successLabel : 'Your question was successfully created',
       },
       identify: {
         customFieldValues: {},
@@ -27,10 +27,6 @@ const HelpdeskView = (props) => {
       attachment: false,
     });
 
-    // if (widget_button !== null) {
-    //   widget_button.click();
-    //   widget_button.style.display = "none";
-    // }
     redmineWidget.toggle();
 
     const captcha = document.querySelector('.frc-captcha');
