@@ -178,6 +178,16 @@ const HelpdeskView = (props) => {
         document.querySelector('.frc-captcha'),
         form.children.container.children.submit_button,
       );
+
+      document.getElementById('widget_button').click();
+      document.getElementById('widget_button').style.cssText = "";
+      document.getElementById('widget_button').style.display = "none";
+
+      document.getElementById('helpdesk_widget').style.cssText = "";
+      document.getElementById('helpdesk_ticket_container').style.position = "";
+      document.getElementById('helpdesk_ticket_container').style.minHeight = "620px";
+      document.getElementById('helpdesk_ticket_container').style.minWidth = "500px";
+
     }, 1000);
   }, []);
 

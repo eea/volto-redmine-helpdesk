@@ -1,5 +1,6 @@
 import iframeExt from './helpdesk_widget/iframe.ext';
 import load_formExt from './helpdesk_widget/load_form.ext';
+import widgetcssExt from './helpdesk_widget/widgetcss.ext';
 
 function getXmlHttp() {
   var xmlhttp;
@@ -179,10 +180,8 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       this.iframe = document.createElement('iframe');
       this.iframe.style.opacity = '0';
       this.widget.appendChild(this.iframe);
-      // debugger;
 
       this.iframe.onload = function () {
-        // debugger;
         api.decorate_iframe();
       };
     },
@@ -206,6 +205,7 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       iframe.setAttribute('name', 'helpdesk_widget_iframe');
     },
     appendToIframe: function (element) {
+      console.log("iframe", this.iframe);
       this.iframe.contentWindow.document.body.appendChild(element);
     },
     fill_form: function () {
@@ -365,7 +365,6 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
     },
     apply_animation: function () {
       const animation_css = document.createElement('link');
-      // animation_css.href = this.base_url + '/helpdesk_widget/animation.css';
       animation_css.href = this.base_url + '/helpdesk_widget/animation.css';
       animation_css.rel = 'stylesheet';
       animation_css.type = 'text/css';
@@ -374,7 +373,8 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
     },
     append_stylesheets: function () {
       const widget_css = document.createElement('link');
-      widget_css.href = this.base_url + '/helpdesk_widget/widget.css';
+      // widget_css.href = this.base_url + '/helpdesk_widget/widget.css';
+      widget_css.href = widgetcssExt;
       widget_css.rel = 'stylesheet';
       widget_css.type = 'text/css';
       this.iframe.contentWindow.document.head.appendChild(widget_css);
@@ -872,7 +872,6 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       eventer(
         messageEvent,
         function (e) {
-          debugger;
           const data = JSON.parse(e.data);
           if (data['reload'] === true) {
             api.reload = true;
