@@ -1,2 +1,1 @@
-link catre cod original
-MIT license
+Captcha code taken from https://github.com/FriendlyCaptcha/friendly-challenge
