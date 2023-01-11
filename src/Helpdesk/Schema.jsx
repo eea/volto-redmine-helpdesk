@@ -9,7 +9,9 @@ const HelpdeskSchema = ({ data }) => {
         title: 'Default',
         fields: [
           'nameLabel', 'emailLabel', 'subjectLabel', 'descriptionLabel',
-					'submitLabel', 'errorLabel', 'successLabel', 'successDescriptionLabel'
+					'submitLabel', 'errorLabel', 'successLabel', 'successDescriptionLabel',
+          'redmineProjectLabel', 'redmineProjectId', 'redmineProjectTrackerLabel',
+          'redmineProjectTrackerId'
         ],
       },
     ],
@@ -18,25 +20,39 @@ const HelpdeskSchema = ({ data }) => {
         title: 'Enter your name label',
 	  	},
 			emailLabel: {
-        title: 'Email label',
+        title: 'Email label'
 	  	},
 			descriptionLabel: {
-        title: 'Description label',
+        title: 'Description label'
 	  	},
 			submitLabel: {
-        title: 'Submit label',
+        title: 'Submit label'
 	  	},
 			successDescriptionLabel: {
-        title: 'Success description label',
+        title: 'Success description label'
 	  	},
 			errorLabel: {
-        title: 'Error label',
+        title: 'Error label'
 	  	},
 			subjectLabel: {
-        title: 'Subject label',
+        title: 'Subject label'
 	  	},
 			successLabel: {
-        title: 'Success label',
+        title: 'Success label'
+	  	},
+			redmineProjectLabel: {
+        title: 'Redmine Project Name'
+	  	},
+			redmineProjectId: {
+        title: 'Redmine Project Id',
+        type: 'number'
+	  	},
+			redmineProjectTrackerLabel: {
+        title: 'Redmine Tracker Name'
+	  	},
+			redmineProjectTrackerId: {
+        title: 'Redmine Tracker Id',
+        type: 'number'
 	  	}
     },
     required: [],

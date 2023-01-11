@@ -25,6 +25,10 @@ const HelpdeskView = (props) => {
         customFieldValues: {},
       },
       attachment: false,
+      redmineProjectId: props.data.redmineProjectId ? props.data.redmineProjectId : 161,
+      redmineProjectLabel: props.data.redmineProjectLabel ? props.data.redmineProjectLabel : 'Eea enquiries',
+      redmineProjectTrackerLabel: props.data.redmineProjectTrackerLabel ? props.data.redmineProjectTrackerLabel : 'Support',
+      redmineProjectTrackerId: props.data.redmineProjectTrackerId ? props.data.redmineProjectTrackerId: 6
     });
 
     redmineWidget.toggle();

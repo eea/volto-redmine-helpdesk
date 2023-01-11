@@ -116,6 +116,13 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
           if (xmlhttp.status === 200 || xmlhttp.status === 304) {
             api.schema = xmlhttp.response;
             console.log('xmlhttp', xmlhttp, xmlhttp.response, api.schema);
+            console.log(api.configuration);
+
+            var tracker = {};
+            api.schema.projects[api.configuration.redmineProjectLabel] = Number(api.configuration.redmineProjectId);
+            tracker[api.configuration.redmineProjectTrackerLabel] = Number(api.configuration.redmineProjectTrackerId);
+            api.schema.projects_data[Number(api.configuration.redmineProjectId)] = {'trackers': tracker}
+
             api.fill_form();
             api.loaded = true;
             api.decorate_iframe();
