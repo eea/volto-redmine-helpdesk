@@ -97,7 +97,9 @@ export const RedmineHelpdeskWidgetFactory = ({widget_button}) => {
       // xmlhttp.open('GET', this.base_url + '/helpdesk_widget/load_form.json', true);
       xmlhttp.open('GET', load_formExt, true);
       xmlhttp.responseType = 'json';
+      debugger;
       xmlhttp.onreadystatechange = function() {
+        debugger;
         if (xmlhttp.readyState === 4) {
           if (xmlhttp.status === 200 || xmlhttp.status === 304) {
             api.schema = xmlhttp.response;
