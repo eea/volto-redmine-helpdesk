@@ -12,23 +12,47 @@ const HelpdeskView = (props) => {
     redmineWidget.config({
       color: '#004B87',
       translation: {
-        nameLabel: props.data.nameLabel ? props.data.nameLabel : 'Enter your name here (Optional)',
-        emailLabel: props.data.emailLabel ? props.data.emailLabel : 'Please put your email here',
-        descriptionLabel: props.data.descriptionLabel ? props.data.descriptionLabel : 'What question do you have?',
-        createButtonLabel: props.data.submitLabel ? props.data.submitLabel : 'Submit question',
-        createSuccessDescription: props.data.successDescriptionLabel ? props.data.successDescriptionLabel : 'Thank you for your question!',
-        createErrorLabel: props.data.errorLabel ? props.data.errorLabel : 'Something went wrong :(...',
-        subjectLabel: props.data.subjectLabel ? props.data.subjectLabel : 'Subject',
-        createSuccessLabel: props.data.successLabel ? props.data.successLabel : 'Your question was successfully created',
+        nameLabel: props.data.nameLabel
+          ? props.data.nameLabel
+          : 'Enter your name here (Optional)',
+        emailLabel: props.data.emailLabel
+          ? props.data.emailLabel
+          : 'Please put your email here',
+        descriptionLabel: props.data.descriptionLabel
+          ? props.data.descriptionLabel
+          : 'What question do you have?',
+        createButtonLabel: props.data.submitLabel
+          ? props.data.submitLabel
+          : 'Submit question',
+        createSuccessDescription: props.data.successDescriptionLabel
+          ? props.data.successDescriptionLabel
+          : 'Thank you for your question!',
+        createErrorLabel: props.data.errorLabel
+          ? props.data.errorLabel
+          : 'Something went wrong :(...',
+        subjectLabel: props.data.subjectLabel
+          ? props.data.subjectLabel
+          : 'Subject',
+        createSuccessLabel: props.data.successLabel
+          ? props.data.successLabel
+          : 'Your question was successfully created',
       },
       identify: {
         customFieldValues: {},
       },
       attachment: false,
-      redmineProjectId: props.data.redmineProjectId ? props.data.redmineProjectId : 161,
-      redmineProjectLabel: props.data.redmineProjectLabel ? props.data.redmineProjectLabel : 'Eea enquiries',
-      redmineProjectTrackerLabel: props.data.redmineProjectTrackerLabel ? props.data.redmineProjectTrackerLabel : 'Support',
-      redmineProjectTrackerId: props.data.redmineProjectTrackerId ? props.data.redmineProjectTrackerId: 6
+      redmineProjectId: props.data.redmineProjectId
+        ? props.data.redmineProjectId
+        : 161,
+      redmineProjectLabel: props.data.redmineProjectLabel
+        ? props.data.redmineProjectLabel
+        : 'Eea enquiries',
+      redmineProjectTrackerLabel: props.data.redmineProjectTrackerLabel
+        ? props.data.redmineProjectTrackerLabel
+        : 'Support',
+      redmineProjectTrackerId: props.data.redmineProjectTrackerId
+        ? props.data.redmineProjectTrackerId
+        : 6,
     });
 
     redmineWidget.toggle();
@@ -173,21 +197,23 @@ const HelpdeskView = (props) => {
         form.children.container.children.custom_fields.children.tracker_id,
       );
       topics_field.outerHTML = topics_field.innerHTML;
-
-      form.children.container.insertBefore(
-        document.querySelector('.frc-captcha'),
-        form.children.container.children.submit_button,
-      );
+      if (document.querySelector('.frc-captcha')) {
+        form.children.container.insertBefore(
+          document.querySelector('.frc-captcha'),
+          form.children.container.children.submit_button,
+        );
+      }
 
       document.getElementById('widget_button').click();
-      document.getElementById('widget_button').style.cssText = "";
-      document.getElementById('widget_button').style.display = "none";
+      document.getElementById('widget_button').style.cssText = '';
+      document.getElementById('widget_button').style.display = 'none';
 
-      document.getElementById('helpdesk_widget').style.cssText = "";
-      document.getElementById('helpdesk_ticket_container').style.position = "";
-      document.getElementById('helpdesk_ticket_container').style.minHeight = "620px";
-      document.getElementById('helpdesk_ticket_container').style.minWidth = "500px";
-
+      document.getElementById('helpdesk_widget').style.cssText = '';
+      document.getElementById('helpdesk_ticket_container').style.position = '';
+      document.getElementById('helpdesk_ticket_container').style.minHeight =
+        '620px';
+      document.getElementById('helpdesk_ticket_container').style.minWidth =
+        '500px';
     }, 1000);
   }, []);
 
