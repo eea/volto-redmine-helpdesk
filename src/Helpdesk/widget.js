@@ -119,9 +119,15 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
             console.log(api.configuration);
 
             var tracker = {};
-            api.schema.projects[api.configuration.redmineProjectLabel] = Number(api.configuration.redmineProjectId);
-            tracker[api.configuration.redmineProjectTrackerLabel] = Number(api.configuration.redmineProjectTrackerId);
-            api.schema.projects_data[Number(api.configuration.redmineProjectId)] = {'trackers': tracker}
+            api.schema.projects[api.configuration.redmineProjectLabel] = Number(
+              api.configuration.redmineProjectId,
+            );
+            tracker[api.configuration.redmineProjectTrackerLabel] = Number(
+              api.configuration.redmineProjectTrackerId,
+            );
+            api.schema.projects_data[
+              Number(api.configuration.redmineProjectId)
+            ] = { trackers: tracker };
 
             api.fill_form();
             api.loaded = true;
@@ -212,8 +218,9 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       iframe.setAttribute('name', 'helpdesk_widget_iframe');
     },
     appendToIframe: function (element) {
-      console.log("iframe", this.iframe);
-      this.iframe.contentWindow.document.body.appendChild(element);
+      console.log('iframe', this.iframe);
+      if (this.iframe)
+        this.iframe.contentWindow?.document.body.appendChild(element);
     },
     fill_form: function () {
       if (Object.keys(this.schema.projects).length > 0) {
@@ -384,7 +391,8 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       widget_css.href = widgetcssExt;
       widget_css.rel = 'stylesheet';
       widget_css.type = 'text/css';
-      this.iframe.contentWindow.document.head.appendChild(widget_css);
+      if (this.iframe)
+        this.iframe.contentWindow?.document.head.appendChild(widget_css);
       if (this.configuration['styles']) {
         const styles_css = document.createElement('style');
         styles_css.innerHTML = this.configuration['styles'];
@@ -399,14 +407,15 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       script.src = iframeExt;
       setTimeout(() => {
         console.log('script element', script, this.iframe);
-        this.iframe.contentWindow.document.head.appendChild(script);
+        if (this.iframe)
+          this.iframe.contentWindow?.document.head.appendChild(script);
 
         const config_script = document.createElement('script');
         config_script.innerHTML =
           'var RedmineHelpdeskIframe = {configuration: ' +
           JSON.stringify(this.configuration) +
           '}';
-        this.iframe.contentWindow.document.head.appendChild(config_script);
+        this.iframe?.contentWindow?.document.head.appendChild(config_script);
       }, 1000);
     },
     create_form: function () {
