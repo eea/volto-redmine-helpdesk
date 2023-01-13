@@ -66,7 +66,7 @@ const HelpdeskView = (props) => {
     captcha_widget.start();
 
     // add code from button click
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       const helpdesk_container = document.getElementById(
         'helpdesk_ticket_container',
       );
@@ -215,6 +215,7 @@ const HelpdeskView = (props) => {
       document.getElementById('helpdesk_ticket_container').style.minWidth =
         '500px';
     }, 1000);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
