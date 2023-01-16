@@ -94,17 +94,6 @@ const HelpdeskView = (props) => {
       }
 
       // custom note/messages
-      let message = document.createElement('span');
-      form.insertBefore(message, form.getElementsByClassName('flash')[0]);
-
-      message.outerHTML =
-        "<span class='discreet note'><strong>Note</strong>: " +
-        'Our online form is currently displayed in English since the EEA working ' +
-        'language is English and that most of our information and content is in ' +
-        'English. You may nevertheless address us in one of the 24 EU official ' +
-        'languages but kindly note that the time to process your enquiry might ' +
-        'be slightly longer. Our expected response time is 15 working days.</span>';
-
       let policy = document.createElement('span');
       form.children.container.insertBefore(
         policy,
@@ -214,9 +203,10 @@ const HelpdeskView = (props) => {
       document.getElementById('helpdesk_widget').style.cssText = '';
       document.getElementById('helpdesk_ticket_container').style.position = '';
       document.getElementById('helpdesk_ticket_container').style.minHeight =
-        '620px';
-      document.getElementById('helpdesk_ticket_container').style.minWidth =
-        '500px';
+        '720px';
+      // document.getElementById('helpdesk_ticket_container').style.minWidth =
+      //   '500px';
+      document.getElementById('helpdesk_ticket_container').style.width = "100%"
     }, 1000);
     return () => clearTimeout(timer);
   }, []);
