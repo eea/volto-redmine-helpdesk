@@ -106,8 +106,6 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       this.loading_div.style.display = 'block';
       this.widget_button.style.display = 'none';
       var xmlhttp = getXmlHttp();
-      // xmlhttp.open('GET', this.base_url + '/helpdesk_widget/load_form.json', true);
-      //
 
       xmlhttp.open('GET', load_formExt, true);
       xmlhttp.responseType = 'json';
@@ -346,7 +344,7 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
         var xmlhttp = getXmlHttp();
         xmlhttp.open(
           'GET',
-          api.base_url + '/helpdesk_widget/avatar/' + avatar,
+          api.configuration.base_url + '/helpdesk_widget/avatar/' + avatar,
           true,
         );
         xmlhttp.onreadystatechange = function () {
@@ -355,7 +353,7 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
               button.style.backgroundSize = 'cover';
               button.style.backgroundImage =
                 'url(' +
-                api.base_url +
+                api.configuration.base_url +
                 '/helpdesk_widget/avatar/' +
                 avatar +
                 ')';
@@ -379,7 +377,7 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
     },
     apply_animation: function () {
       const animation_css = document.createElement('link');
-      animation_css.href = this.base_url + '/helpdesk_widget/animation.css';
+      animation_css.href = api.configuration.base_url + '/helpdesk_widget/animation.css';
       animation_css.rel = 'stylesheet';
       animation_css.type = 'text/css';
 
@@ -387,7 +385,6 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
     },
     append_stylesheets: function () {
       const widget_css = document.createElement('link');
-      // widget_css.href = this.base_url + '/helpdesk_widget/widget.css';
       widget_css.href = widgetcssExt;
       widget_css.rel = 'stylesheet';
       widget_css.type = 'text/css';
@@ -403,7 +400,6 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
     append_scripts: function () {
       const script = document.createElement('script');
       script.type = 'text/javascript';
-      // script.src = this.base_url + '/helpdesk_widget/iframe.ext';
       script.src = iframeExt;
       setTimeout(() => {
         console.log('script element', script, this.iframe);
@@ -420,11 +416,13 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
     },
     create_form: function () {
       this.form = document.createElement('form');
-      this.form.action = this.base_url + '/helpdesk_widget/create_ticket';
+      this.form.action = api.configuration.base_url + '/helpdesk_widget/create_ticket';
       this.form.acceptCharset = 'UTF-8';
       this.form.method = 'post';
       this.form.id = 'widget_form';
-      this.form.setAttribute('onSubmit', 'submitTicketForm(); return false;');
+      // this.form.setAttribute('onSubmit', 'submitTicketForm(' + api.configuration.base_url + '); return false;');
+      this.form.setAttribute('onSubmit', 'submitTicketForm("' + api.configuration.base_url + '"); return false;');
+
       this.form.style.marginBottom = 0;
     },
     create_form_close_button: function () {
@@ -750,7 +748,7 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       const custom_div = document.createElement('div');
       xmlhttp.open(
         'GET',
-        this.base_url + '/helpdesk_widget/load_custom_fields?' + params,
+        api.configuration.base_url + '/helpdesk_widget/load_custom_fields?' + params,
         true,
       );
       xmlhttp.onreadystatechange = function () {

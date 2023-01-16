@@ -53,6 +53,9 @@ const HelpdeskView = (props) => {
       redmineProjectTrackerId: props.data.redmineProjectTrackerId
         ? props.data.redmineProjectTrackerId
         : 6,
+      base_url: props.data.redmineUrl
+        ? props.data.redmineUrl
+        : 'https://taskman.eionet.europa.eu',
     });
 
     redmineWidget.toggle();

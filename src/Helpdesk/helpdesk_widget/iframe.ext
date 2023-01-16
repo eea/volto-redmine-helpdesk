@@ -208,12 +208,11 @@ function closeTicketForm(){
   parent.postMessage(JSON.stringify({ close: true }), "*");
 }
 
-function submitTicketForm(){
+function submitTicketForm(base_url){
   document.getElementById('flash').innerHTML = '';
   unmarkFieldsAsError();
   if (markRequireFieldsAsError()){ return false; }
-
-  var base_url = 'https://taskman.eionet.europa.eu'
+  // var base_url = 'https://taskman.eionet.europa.eu'
   var xmlhttp = getXmlHttp();
   var serialize_result = serialize(document.getElementById('widget_form'));
   var boundary = serialize_result[0];
