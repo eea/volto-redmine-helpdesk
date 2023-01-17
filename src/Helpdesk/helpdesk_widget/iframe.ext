@@ -218,7 +218,7 @@ function submitTicketForm(base_url){
   var boundary = serialize_result[0];
   var form_params = serialize_result[1];
   document.getElementById('form-submit-btn').disabled = true;
-  xmlhttp.open('POST', base_url + '/helpdesk_widget/create_ticket.js', true);
+  xmlhttp.open('POST', base_url + '/helpdesk_widget/create_ticket', true);
   xmlhttp.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + boundary);
   xmlhttp.onreadystatechange = function() {
     if (xmlhttp.readyState == 4) {
