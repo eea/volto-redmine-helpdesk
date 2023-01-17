@@ -20,7 +20,7 @@ const HelpdeskSchema = ({ data }) => {
           'redmineProjectId',
           'redmineProjectTrackerLabel',
           'redmineProjectTrackerId',
-          'redmineUrl'
+          'redmineUrl',
         ],
       },
     ],
@@ -64,8 +64,8 @@ const HelpdeskSchema = ({ data }) => {
         type: 'number',
       },
       redmineUrl: {
-        title: 'Redmine URL'
-      }
+        title: 'Redmine URL',
+      },
     },
     required: [],
   };
