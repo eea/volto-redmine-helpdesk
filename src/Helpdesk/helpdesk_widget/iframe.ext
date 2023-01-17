@@ -1,3 +1,4 @@
+/* eslint-disable */
 function getXmlHttp(){
   var xmlhttp;
   try {

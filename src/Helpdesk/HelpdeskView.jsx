@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import { RedmineHelpdeskWidgetFactory } from './widget';
 import '../captcha/widget';
@@ -207,6 +208,29 @@ const HelpdeskView = (props) => {
       // document.getElementById('helpdesk_ticket_container').style.minWidth =
       //   '500px';
       document.getElementById('helpdesk_ticket_container').style.width = "100%"
+
+      // function verifyCaptcha() {
+      //     var url = "captcha-verify";
+      //     const helpdesk_container = document.getElementById(
+      //       'helpdesk_ticket_container',
+      //     );
+      //     const form = helpdesk_container.contentWindow.document.body.children[0];
+      //     const solution = form.querySelector('.frc-captcha-solution').value || '.NOTFOUND';
+      //
+      //     const requestOptions = {
+      //       method: 'POST',
+      //       headers: { 'Content-Type': 'application/json' },
+      //       body: JSON.stringify({ 'solution': solution })
+      //     }
+      //
+      //     fetch(url, requestOptions).then(response => {
+      //       return response.body;
+      //     });;
+      // }
+      //
+      // verifyCaptcha();
+
+
     }, 1000);
     return () => clearTimeout(timer);
   }, []);

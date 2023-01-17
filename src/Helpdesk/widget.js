@@ -1,3 +1,4 @@
+/* eslint-disable */
 import iframeExt from './helpdesk_widget/iframe.ext';
 import load_formExt from './helpdesk_widget/load_form.ext';
 import widgetcssExt from './helpdesk_widget/widgetcss.ext';
