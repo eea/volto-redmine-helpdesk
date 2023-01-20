@@ -378,7 +378,8 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
     },
     apply_animation: function () {
       const animation_css = document.createElement('link');
-      animation_css.href = api.configuration.base_url + '/helpdesk_widget/animation.css';
+      animation_css.href =
+        api.configuration.base_url + '/helpdesk_widget/animation.css';
       animation_css.rel = 'stylesheet';
       animation_css.type = 'text/css';
 
@@ -417,12 +418,16 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
     },
     create_form: function () {
       this.form = document.createElement('form');
-      this.form.action = api.configuration.base_url + '/helpdesk_widget/create_ticket';
+      this.form.action =
+        api.configuration.base_url + '/helpdesk_widget/create_ticket';
       this.form.acceptCharset = 'UTF-8';
       this.form.method = 'post';
       this.form.id = 'widget_form';
       // this.form.setAttribute('onSubmit', 'submitTicketForm(' + api.configuration.base_url + '); return false;');
-      this.form.setAttribute('onSubmit', 'submitTicketForm("' + api.configuration.base_url + '"); return false;');
+      this.form.setAttribute(
+        'onSubmit',
+        'submitTicketForm("' + api.configuration.base_url + '"); return false;',
+      );
 
       this.form.style.marginBottom = 0;
     },
@@ -749,7 +754,9 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       const custom_div = document.createElement('div');
       xmlhttp.open(
         'GET',
-        api.configuration.base_url + '/helpdesk_widget/load_custom_fields?' + params,
+        api.configuration.base_url +
+          '/helpdesk_widget/load_custom_fields?' +
+          params,
         true,
       );
       xmlhttp.onreadystatechange = function () {

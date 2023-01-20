@@ -207,30 +207,35 @@ const HelpdeskView = (props) => {
         '720px';
       // document.getElementById('helpdesk_ticket_container').style.minWidth =
       //   '500px';
-      document.getElementById('helpdesk_ticket_container').style.width = "100%"
+      document.getElementById('helpdesk_ticket_container').style.width = '100%';
 
-      // function verifyCaptcha() {
-      //     var url = "captcha-verify";
-      //     const helpdesk_container = document.getElementById(
-      //       'helpdesk_ticket_container',
-      //     );
-      //     const form = helpdesk_container.contentWindow.document.body.children[0];
-      //     const solution = form.querySelector('.frc-captcha-solution').value || '.NOTFOUND';
-      //
-      //     const requestOptions = {
-      //       method: 'POST',
-      //       headers: { 'Content-Type': 'application/json' },
-      //       body: JSON.stringify({ 'solution': solution })
-      //     }
-      //
-      //     fetch(url, requestOptions).then(response => {
-      //       return response.body;
-      //     });;
-      // }
-      //
-      // verifyCaptcha();
+      function verifyCaptcha(event) {
+        var url = '@captchaverify';
+        const helpdesk_container = document.getElementById(
+          'helpdesk_ticket_container',
+        );
+        const form = helpdesk_container.contentWindow.document.body.children[0];
+        const solution =
+          form.querySelector('.frc-captcha-solution').value || '.NOTFOUND';
 
+        const requestOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ solution: solution }),
+        };
+        const result = fetch(url, requestOptions).then((response) => {
+          return response.body.success;
+        });
 
+        if (result) {
+          console.log('Valid captcha');
+        } else {
+          event.preventDefault();
+          console.log('Invalid captcha');
+        }
+        return result;
+      }
+      form.addEventListener('submit', verifyCaptcha);
     }, 1000);
     return () => clearTimeout(timer);
   }, []);
