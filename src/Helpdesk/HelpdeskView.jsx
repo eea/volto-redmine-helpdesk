@@ -235,7 +235,7 @@ const HelpdeskView = (props) => {
         }
         return result;
       }
-      // form.addEventListener('submit', verifyCaptcha);
+      form.addEventListener('submit', verifyCaptcha);
     }, 1000);
     return () => clearTimeout(timer);
   }, []);
