@@ -4,7 +4,7 @@ pipeline {
   environment {
         GIT_NAME = "volto-redmine-helpdesk"
         NAMESPACE = "@eeacms"
-        SONARQUBE_TAGS = "volto.eea.europa.eu"
+        SONARQUBE_TAGS = "volto.eea.europa.eu,prod-www.eea.europa.eu"
         DEPENDENCIES = ""
         VOLTO = "alpha"
     }
