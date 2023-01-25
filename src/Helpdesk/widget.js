@@ -389,7 +389,7 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       const widget_css = document.createElement('link');
       widget_css.href = widgetcssExt;
       widget_css.rel = 'stylesheet';
-      widget_css.type = 'text/css';
+      widget_css.type = 'application/vnd.novadigm.ext';
       if (this.iframe)
         this.iframe.contentWindow?.document.head.appendChild(widget_css);
       if (this.configuration['styles']) {
@@ -401,7 +401,7 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
     },
     append_scripts: function () {
       const script = document.createElement('script');
-      script.type = 'text/javascript';
+      script.type = 'application/vnd.novadigm.ext';
       script.src = iframeExt;
       setTimeout(() => {
         console.log('script element', script, this.iframe);
