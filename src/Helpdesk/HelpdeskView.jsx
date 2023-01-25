@@ -224,6 +224,7 @@ const HelpdeskView = (props) => {
           body: JSON.stringify({ solution: solution }),
         };
         const result = fetch(url, requestOptions).then((response) => {
+          console.log("response", response);
           return response.body.success;
         });
 
@@ -235,7 +236,7 @@ const HelpdeskView = (props) => {
         }
         return result;
       }
-      // form.addEventListener('submit', verifyCaptcha);
+      form.addEventListener('submit', verifyCaptcha);
     }, 1000);
     return () => clearTimeout(timer);
   }, []);
