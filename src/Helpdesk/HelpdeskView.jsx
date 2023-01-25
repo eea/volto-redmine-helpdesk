@@ -224,7 +224,7 @@ const HelpdeskView = (props) => {
           body: JSON.stringify({ solution: solution }),
         };
         const result = fetch(url, requestOptions).then((response) => {
-          console.log("response", response);
+          console.log('response', response);
           return response.body.success;
         });
 

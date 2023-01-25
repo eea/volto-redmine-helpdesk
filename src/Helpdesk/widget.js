@@ -37,7 +37,7 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
     form: null,
     schema: null,
     reload: false,
-    configuration: { base_url: 'https://taskman.eionet.europa.eu'},
+    configuration: { base_url: 'https://taskman.eionet.europa.eu' },
     attachment: null,
     // base_url: 'https://taskman.eionet.europa.eu',
     base_url: '',
@@ -408,8 +408,7 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       const script = document.createElement('script');
       script.type = 'text/javascript';
       // script.src = iframeExt;
-      script.src =
-        api.configuration.base_url + '/helpdesk_widget/iframe.js';
+      script.src = api.configuration.base_url + '/helpdesk_widget/iframe.js';
 
       setTimeout(() => {
         console.log('script element', script, this.iframe);
