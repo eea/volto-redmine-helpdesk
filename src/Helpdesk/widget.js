@@ -37,7 +37,7 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
     form: null,
     schema: null,
     reload: false,
-    configuration: {},
+    configuration: { base_url: 'https://taskman.eionet.europa.eu'},
     attachment: null,
     // base_url: 'https://taskman.eionet.europa.eu',
     base_url: '',
