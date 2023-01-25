@@ -387,10 +387,14 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
     },
     append_stylesheets: function () {
       const widget_css = document.createElement('link');
-      widget_css.href = widgetcssExt;
-      widget_css.rel = 'stylesheet';
+
+      widget_css.href =
+        api.configuration.base_url + '/helpdesk_widget/widget.css';
+      // widget_css.href = widgetcssExt;
       // widget_css.type = 'application/vnd.novadigm.ext';
+      widget_css.rel = 'stylesheet';
       widget_css.type = 'text/css';
+
       if (this.iframe)
         this.iframe.contentWindow?.document.head.appendChild(widget_css);
       if (this.configuration['styles']) {
@@ -404,6 +408,9 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       const script = document.createElement('script');
       script.type = 'text/javascript';
       script.src = iframeExt;
+      // script.src =
+      //   api.configuration.base_url + '/helpdesk_widget/iframe.js';
+
       setTimeout(() => {
         console.log('script element', script, this.iframe);
         if (this.iframe)
