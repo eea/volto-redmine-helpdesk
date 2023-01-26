@@ -224,14 +224,15 @@ const HelpdeskView = (props) => {
           body: JSON.stringify({ solution: solution }),
         };
         const result = fetch(url, requestOptions).then((response) => {
+          // console.log('response', response);
           return response.body.success;
         });
 
         if (result) {
-          console.log('Valid captcha');
+          // console.log('Valid captcha');
         } else {
           event.preventDefault();
-          console.log('Invalid captcha');
+          // console.log('Invalid captcha');
         }
         return result;
       }

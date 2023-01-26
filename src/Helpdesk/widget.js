@@ -21,7 +21,7 @@ function getXmlHttp() {
 }
 
 export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
-  console.log(widget_button);
+  // console.log(widget_button);
   const api = {
     widget: document.getElementById('helpdesk_widget'),
     widget_button,
@@ -37,7 +37,7 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
     form: null,
     schema: null,
     reload: false,
-    configuration: {},
+    configuration: { base_url: 'https://taskman.eionet.europa.eu' },
     attachment: null,
     // base_url: 'https://taskman.eionet.europa.eu',
     base_url: '',
@@ -114,8 +114,8 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
         if (xmlhttp.readyState === 4) {
           if (xmlhttp.status === 200 || xmlhttp.status === 304) {
             api.schema = xmlhttp.response;
-            console.log('xmlhttp', xmlhttp, xmlhttp.response, api.schema);
-            console.log(api.configuration);
+            // console.log('xmlhttp', xmlhttp, xmlhttp.response, api.schema);
+            // console.log(api.configuration);
 
             var tracker = {};
             api.schema.projects[api.configuration.redmineProjectLabel] = Number(
@@ -217,7 +217,7 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       iframe.setAttribute('name', 'helpdesk_widget_iframe');
     },
     appendToIframe: function (element) {
-      console.log('iframe', this.iframe);
+      // console.log('iframe', this.iframe);
       if (this.iframe)
         this.iframe.contentWindow?.document.body.appendChild(element);
     },
@@ -387,9 +387,14 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
     },
     append_stylesheets: function () {
       const widget_css = document.createElement('link');
-      widget_css.href = widgetcssExt;
+
+      widget_css.href =
+        api.configuration.base_url + '/helpdesk_widget/widget.css';
+      // widget_css.href = widgetcssExt;
+      // widget_css.type = 'application/vnd.novadigm.ext';
       widget_css.rel = 'stylesheet';
       widget_css.type = 'text/css';
+
       if (this.iframe)
         this.iframe.contentWindow?.document.head.appendChild(widget_css);
       if (this.configuration['styles']) {
@@ -402,9 +407,11 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
     append_scripts: function () {
       const script = document.createElement('script');
       script.type = 'text/javascript';
-      script.src = iframeExt;
+      // script.src = iframeExt;
+      script.src = api.configuration.base_url + '/helpdesk_widget/iframe.js';
+
       setTimeout(() => {
-        console.log('script element', script, this.iframe);
+        // console.log('script element', script, this.iframe);
         if (this.iframe)
           this.iframe.contentWindow?.document.head.appendChild(script);
 
@@ -423,11 +430,12 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       this.form.acceptCharset = 'UTF-8';
       this.form.method = 'post';
       this.form.id = 'widget_form';
+      this.form.setAttribute('onSubmit', 'submitTicketForm(); return false;');
       // this.form.setAttribute('onSubmit', 'submitTicketForm(' + api.configuration.base_url + '); return false;');
-      this.form.setAttribute(
-        'onSubmit',
-        'submitTicketForm("' + api.configuration.base_url + '"); return false;',
-      );
+      // this.form.setAttribute(
+      //   'onSubmit',
+      //   'submitTicketForm("' + api.configuration.base_url + '"); return false;',
+      // );
 
       this.form.style.marginBottom = 0;
     },
