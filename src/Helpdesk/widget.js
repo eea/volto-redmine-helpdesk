@@ -21,7 +21,7 @@ function getXmlHttp() {
 }
 
 export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
-  console.log(widget_button);
+  // console.log(widget_button);
   const api = {
     widget: document.getElementById('helpdesk_widget'),
     widget_button,
@@ -114,8 +114,8 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
         if (xmlhttp.readyState === 4) {
           if (xmlhttp.status === 200 || xmlhttp.status === 304) {
             api.schema = xmlhttp.response;
-            console.log('xmlhttp', xmlhttp, xmlhttp.response, api.schema);
-            console.log(api.configuration);
+            // console.log('xmlhttp', xmlhttp, xmlhttp.response, api.schema);
+            // console.log(api.configuration);
 
             var tracker = {};
             api.schema.projects[api.configuration.redmineProjectLabel] = Number(
@@ -217,7 +217,7 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       iframe.setAttribute('name', 'helpdesk_widget_iframe');
     },
     appendToIframe: function (element) {
-      console.log('iframe', this.iframe);
+      // console.log('iframe', this.iframe);
       if (this.iframe)
         this.iframe.contentWindow?.document.body.appendChild(element);
     },
@@ -411,7 +411,7 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       script.src = api.configuration.base_url + '/helpdesk_widget/iframe.js';
 
       setTimeout(() => {
-        console.log('script element', script, this.iframe);
+        // console.log('script element', script, this.iframe);
         if (this.iframe)
           this.iframe.contentWindow?.document.head.appendChild(script);
 
