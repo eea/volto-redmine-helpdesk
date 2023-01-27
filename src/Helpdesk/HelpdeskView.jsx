@@ -2,7 +2,7 @@
 import React from 'react';
 import { RedmineHelpdeskWidgetFactory } from './widget';
 import '../captcha/widget';
-import {addAppURL} from '@plone/volto/helpers';
+import {addAppURL, expandToBackendURL} from '@plone/volto/helpers';
 
 const HelpdeskView = (props) => {
   React.useEffect(() => {
@@ -211,6 +211,7 @@ const HelpdeskView = (props) => {
 
       function verifyCaptcha(event) {
         var url = addAppURL('@captchaverify');
+        var url2 = expandToBackendURL('@captchaverify');
         const helpdesk_container = document.getElementById(
           'helpdesk_ticket_container',
         );
@@ -223,7 +224,7 @@ const HelpdeskView = (props) => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ solution: solution }),
         };
-        const result = fetch(url, requestOptions).then((response) => {
+        const result = fetch(url2, requestOptions).then((response) => {
           console.log('response', response);
           return response.body.success;
         });
