@@ -2,6 +2,7 @@
 import React from 'react';
 import { RedmineHelpdeskWidgetFactory } from './widget';
 import '../captcha/widget';
+import {addAppURL} from '@plone/volto/helpers';
 
 const HelpdeskView = (props) => {
   React.useEffect(() => {
@@ -60,14 +61,6 @@ const HelpdeskView = (props) => {
     });
 
     redmineWidget.toggle();
-
-    const captcha = document.querySelector('.frc-captcha');
-    const options = {
-      sitekey: 'FCMR3DVP81RFD3ML',
-    };
-    const WidgetInstance = window.friendlyChallenge.WidgetInstance;
-    const captcha_widget = new WidgetInstance(captcha, options);
-    captcha_widget.start();
 
     // add code from button click
     const timer = setTimeout(() => {
@@ -196,6 +189,13 @@ const HelpdeskView = (props) => {
           form.children.container.children.submit_button,
         );
       }
+      const captcha = form.querySelector('.frc-captcha');
+      const options = {
+        sitekey: 'FCMR3DVP81RFD3ML',
+      };
+      const WidgetInstance = window.friendlyChallenge.WidgetInstance;
+      const captcha_widget = new WidgetInstance(captcha, options);
+      captcha_widget.start();
 
       document.getElementById('widget_button').click();
       document.getElementById('widget_button').style.cssText = '';
@@ -210,7 +210,7 @@ const HelpdeskView = (props) => {
       document.getElementById('helpdesk_ticket_container').style.width = '100%';
 
       function verifyCaptcha(event) {
-        var url = '@captchaverify';
+        var url = addAppURL('@captchaverify');
         const helpdesk_container = document.getElementById(
           'helpdesk_ticket_container',
         );
