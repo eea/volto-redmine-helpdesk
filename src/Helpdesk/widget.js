@@ -383,10 +383,9 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
     append_stylesheets: function () {
       const widget_css = document.createElement('link');
 
-      widget_css.href =
-        api.configuration.base_url + '/helpdesk_widget/widget.css';
-      // widget_css.href = widgetcssExt;
-      // widget_css.type = 'application/vnd.novadigm.ext';
+      // widget_css.href =
+      //   api.configuration.base_url + '/helpdesk_widget/widget.css';
+      widget_css.href = widgetcssExt;
       widget_css.rel = 'stylesheet';
       widget_css.type = 'text/css';
 
@@ -425,12 +424,12 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       this.form.acceptCharset = 'UTF-8';
       this.form.method = 'post';
       this.form.id = 'widget_form';
-      this.form.setAttribute('onSubmit', 'submitTicketForm(); return false;');
+      // this.form.setAttribute('onSubmit', 'submitTicketForm(); return false;');
       // this.form.setAttribute('onSubmit', 'submitTicketForm(' + api.configuration.base_url + '); return false;');
-      // this.form.setAttribute(
-      //   'onSubmit',
-      //   'submitTicketForm("' + api.configuration.base_url + '"); return false;',
-      // );
+      this.form.setAttribute(
+        'onSubmit',
+        'submitTicketForm("' + api.configuration.base_url + '"); return false;',
+      );
 
       this.form.style.marginBottom = 0;
     },
