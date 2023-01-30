@@ -57,6 +57,9 @@ const HelpdeskView = (props) => {
       base_url: props.data.redmineUrl
         ? props.data.redmineUrl
         : 'https://taskman.eionet.europa.eu',
+      privacyPolicy: props.data.privacyPolicy
+        ? props.data.privacyPolicy
+        : '<p>I agree with the <a href="/en/about/official-documents/contact-us-privacy-statement">privacy statement</a></p>',
     });
 
     redmineWidget.toggle();
