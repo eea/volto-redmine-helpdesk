@@ -383,9 +383,9 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
     append_stylesheets: function () {
       const widget_css = document.createElement('link');
 
-      // widget_css.href =
-      //   api.configuration.base_url + '/helpdesk_widget/widget.css';
-      widget_css.href = widgetcssExt;
+      widget_css.href =
+        api.configuration.base_url + '/helpdesk_widget/widget.css';
+      // widget_css.href = widgetcssExt;
       widget_css.rel = 'stylesheet';
       widget_css.type = 'text/css';
 
@@ -400,7 +400,8 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
     },
     append_scripts: function () {
       const script = document.createElement('script');
-      script.type = 'text/javascript';
+      script.type = 'application/octet-stream';
+      // script.type = 'text/javascript';
       script.src = iframeExt;
       // script.src = api.configuration.base_url + '/helpdesk_widget/iframe.js';
 
