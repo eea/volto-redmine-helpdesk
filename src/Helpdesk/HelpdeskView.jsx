@@ -2,7 +2,7 @@
 import React from 'react';
 import { RedmineHelpdeskWidgetFactory } from './widget';
 import '../captcha/widget';
-import {addAppURL, expandToBackendURL} from '@plone/volto/helpers';
+import { addAppURL, expandToBackendURL, Api } from '@plone/volto/helpers';
 
 const HelpdeskView = (props) => {
   React.useEffect(() => {
@@ -63,7 +63,7 @@ const HelpdeskView = (props) => {
     redmineWidget.toggle();
 
     // add code from button click
-    const timer = setTimeout(() => {
+    const timer = setTimeout(async () => {
       const helpdesk_container = document.getElementById(
         'helpdesk_ticket_container',
       );
@@ -190,11 +190,19 @@ const HelpdeskView = (props) => {
         );
       }
       const captcha = form.querySelector('.frc-captcha');
-      const options = {
-        sitekey: 'FCMR3DVP81RFD3ML',
+
+      let options = async function () {
+        var url = expandToBackendURL(
+          '@registry/eea.kitkat.browser.captcha.ICaptchaSettings.username',
+        );
+        const api = new Api();
+        let key = await api.get(url);
+        return { sitekey: key };
       };
+
+      let result = await options();
       const WidgetInstance = window.friendlyChallenge.WidgetInstance;
-      const captcha_widget = new WidgetInstance(captcha, options);
+      const captcha_widget = new WidgetInstance(captcha, result);
       captcha_widget.start();
 
       document.getElementById('widget_button').click();
@@ -209,9 +217,9 @@ const HelpdeskView = (props) => {
       //   '500px';
       document.getElementById('helpdesk_ticket_container').style.width = '100%';
 
-      function verifyCaptcha(event) {
-        var url = addAppURL('@captchaverify');
-        var url2 = expandToBackendURL('@captchaverify');
+      let verifyCaptcha = async function (event) {
+        var url = expandToBackendURL('@captchaverify');
+        const api = new Api();
         const helpdesk_container = document.getElementById(
           'helpdesk_ticket_container',
         );
@@ -219,24 +227,20 @@ const HelpdeskView = (props) => {
         const solution =
           form.querySelector('.frc-captcha-solution').value || '.NOTFOUND';
 
-        const requestOptions = {
-          method: 'POST',
+        const post_options = {
+          data: JSON.stringify({ solution: solution }),
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ solution: solution }),
         };
-        const result = fetch(url2, requestOptions).then((response) => {
-          console.log('response', response);
-          return response.body.success;
-        });
+        const result = JSON.parse(await api.post(url, post_options));
 
         if (result) {
-          console.log('Valid captcha');
+          // pass
         } else {
           event.preventDefault();
-          console.log('Invalid captcha');
         }
         return result;
-      }
+      };
+
       form.addEventListener('submit', verifyCaptcha);
     }, 1000);
     return () => clearTimeout(timer);

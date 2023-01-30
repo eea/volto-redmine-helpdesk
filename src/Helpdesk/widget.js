@@ -407,8 +407,8 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
     append_scripts: function () {
       const script = document.createElement('script');
       script.type = 'text/javascript';
-      // script.src = iframeExt;
-      script.src = api.configuration.base_url + '/helpdesk_widget/iframe.js';
+      script.src = iframeExt;
+      // script.src = api.configuration.base_url + '/helpdesk_widget/iframe.js';
 
       setTimeout(() => {
         console.log('script element', script, this.iframe);
@@ -682,7 +682,7 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       var checkbox_label = document.createElement('label');
       checkbox_label.htmlFor = checkbox.id;
       // slice(3, -4) for removing wrapper <p>...</p>
-      checkbox_label.innerHTML = `<p>I read and agree with the <a href="https://www.eea.europa.eu/legal/privacy/contact-us-privacy-statement" class="external">privacy statement</a></p>`.slice(
+      checkbox_label.innerHTML = '<p>I agree with the <a href="/en/about/official-documents/contact-us-privacy-statement">privacy statement</a></p>'.slice(
         3,
         -4,
       );
