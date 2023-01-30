@@ -2,12 +2,12 @@
 import React from 'react';
 import { RedmineHelpdeskWidgetFactory } from './widget';
 import '../captcha/widget';
+import { addAppURL, expandToBackendURL, Api } from '@plone/volto/helpers';
 
 const HelpdeskView = (props) => {
   React.useEffect(() => {
     const widget_button = document.getElementById('widget_button');
     const redmineWidget = RedmineHelpdeskWidgetFactory({ widget_button });
-    console.log(props);
 
     redmineWidget.load();
     redmineWidget.config({
@@ -57,20 +57,15 @@ const HelpdeskView = (props) => {
       base_url: props.data.redmineUrl
         ? props.data.redmineUrl
         : 'https://taskman.eionet.europa.eu',
+      privacyPolicy: props.data.privacyPolicy
+        ? props.data.privacyPolicy
+        : '<p>I agree with the <a href="/en/about/official-documents/contact-us-privacy-statement">privacy statement</a></p>',
     });
 
     redmineWidget.toggle();
 
-    const captcha = document.querySelector('.frc-captcha');
-    const options = {
-      sitekey: 'FCMR3DVP81RFD3ML',
-    };
-    const WidgetInstance = window.friendlyChallenge.WidgetInstance;
-    const captcha_widget = new WidgetInstance(captcha, options);
-    captcha_widget.start();
-
     // add code from button click
-    const timer = setTimeout(() => {
+    const timer = setTimeout(async () => {
       const helpdesk_container = document.getElementById(
         'helpdesk_ticket_container',
       );
@@ -196,6 +191,21 @@ const HelpdeskView = (props) => {
           form.children.container.children.submit_button,
         );
       }
+      const captcha = form.querySelector('.frc-captcha');
+
+      let options = async function () {
+        var url = expandToBackendURL(
+          '@registry/eea.kitkat.browser.captcha.ICaptchaSettings.username',
+        );
+        const api = new Api();
+        let key = await api.get(url);
+        return { sitekey: key };
+      };
+
+      let result = await options();
+      const WidgetInstance = window.friendlyChallenge.WidgetInstance;
+      const captcha_widget = new WidgetInstance(captcha, result);
+      captcha_widget.start();
 
       document.getElementById('widget_button').click();
       document.getElementById('widget_button').style.cssText = '';
@@ -209,8 +219,9 @@ const HelpdeskView = (props) => {
       //   '500px';
       document.getElementById('helpdesk_ticket_container').style.width = '100%';
 
-      function verifyCaptcha(event) {
-        var url = '@captchaverify';
+      let verifyCaptcha = async function (event) {
+        var url = expandToBackendURL('@captchaverify');
+        const api = new Api();
         const helpdesk_container = document.getElementById(
           'helpdesk_ticket_container',
         );
@@ -218,25 +229,21 @@ const HelpdeskView = (props) => {
         const solution =
           form.querySelector('.frc-captcha-solution').value || '.NOTFOUND';
 
-        const requestOptions = {
-          method: 'POST',
+        const post_options = {
+          data: JSON.stringify({ solution: solution }),
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ solution: solution }),
         };
-        const result = fetch(url, requestOptions).then((response) => {
-          // console.log('response', response);
-          return response.body.success;
-        });
+        const result = JSON.parse(await api.post(url, post_options));
 
         if (result) {
-          // console.log('Valid captcha');
+          // pass
         } else {
           event.preventDefault();
-          // console.log('Invalid captcha');
         }
         return result;
-      }
-      // form.addEventListener('submit', verifyCaptcha);
+      };
+
+      form.addEventListener('submit', verifyCaptcha);
     }, 1000);
     return () => clearTimeout(timer);
   }, []);

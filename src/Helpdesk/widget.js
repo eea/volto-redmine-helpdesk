@@ -1,7 +1,7 @@
 /* eslint-disable */
-import iframeExt from './helpdesk_widget/iframe.ext';
-import load_formExt from './helpdesk_widget/load_form.ext';
-import widgetcssExt from './helpdesk_widget/widgetcss.ext';
+import iframeExt from './helpdesk_widget/iframe.pro';
+import load_formExt from './helpdesk_widget/load_form.pro';
+import widgetcssExt from './helpdesk_widget/widgetcss.pro';
 
 function getXmlHttp() {
   var xmlhttp;
@@ -21,7 +21,6 @@ function getXmlHttp() {
 }
 
 export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
-  // console.log(widget_button);
   const api = {
     widget: document.getElementById('helpdesk_widget'),
     widget_button,
@@ -100,7 +99,6 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       this.apply_animation();
       this.widget_button.addEventListener('click', function () {
         api.toggle();
-        console.log('clicked');
       });
     },
     load_schema: function () {
@@ -114,8 +112,6 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
         if (xmlhttp.readyState === 4) {
           if (xmlhttp.status === 200 || xmlhttp.status === 304) {
             api.schema = xmlhttp.response;
-            // console.log('xmlhttp', xmlhttp, xmlhttp.response, api.schema);
-            // console.log(api.configuration);
 
             var tracker = {};
             api.schema.projects[api.configuration.redmineProjectLabel] = Number(
@@ -217,7 +213,6 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       iframe.setAttribute('name', 'helpdesk_widget_iframe');
     },
     appendToIframe: function (element) {
-      // console.log('iframe', this.iframe);
       if (this.iframe)
         this.iframe.contentWindow?.document.body.appendChild(element);
     },
@@ -391,7 +386,6 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       widget_css.href =
         api.configuration.base_url + '/helpdesk_widget/widget.css';
       // widget_css.href = widgetcssExt;
-      // widget_css.type = 'application/vnd.novadigm.ext';
       widget_css.rel = 'stylesheet';
       widget_css.type = 'text/css';
 
@@ -406,12 +400,13 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
     },
     append_scripts: function () {
       const script = document.createElement('script');
-      script.type = 'text/javascript';
+      // script.type = 'application/octet-stream';
       // script.src = iframeExt;
+      script.type = 'text/javascript';
       script.src = api.configuration.base_url + '/helpdesk_widget/iframe.js';
 
       setTimeout(() => {
-        // console.log('script element', script, this.iframe);
+        console.log('script element', script, this.iframe);
         if (this.iframe)
           this.iframe.contentWindow?.document.head.appendChild(script);
 
@@ -682,10 +677,7 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       var checkbox_label = document.createElement('label');
       checkbox_label.htmlFor = checkbox.id;
       // slice(3, -4) for removing wrapper <p>...</p>
-      checkbox_label.innerHTML = `<p>I read and agree with the <a href="https://www.eea.europa.eu/legal/privacy/contact-us-privacy-statement" class="external">privacy statement</a></p>`.slice(
-        3,
-        -4,
-      );
+      checkbox_label.innerHTML = api.configuration.privacyPolicy.slice(3, -4);
 
       var links = checkbox_label.getElementsByTagName('a');
       for (var i = 0, len = links.length; i < len; i++) {

@@ -21,6 +21,7 @@ const HelpdeskSchema = ({ data }) => {
           'redmineProjectTrackerLabel',
           'redmineProjectTrackerId',
           'redmineUrl',
+          'privacyPolicy',
         ],
       },
     ],
@@ -65,6 +66,10 @@ const HelpdeskSchema = ({ data }) => {
       },
       redmineUrl: {
         title: 'Redmine URL',
+      },
+      privacyPolicy: {
+        title: 'Privacy Policy',
+        widget: 'richtext',
       },
     },
     required: [],
