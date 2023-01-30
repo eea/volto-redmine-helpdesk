@@ -69,7 +69,7 @@ const HelpdeskSchema = ({ data }) => {
       },
       privacyPolicy: {
         title: 'Privacy Policy',
-        widget: 'richtext'
+        widget: 'richtext',
       },
     },
     required: [],
