@@ -400,10 +400,10 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
     },
     append_scripts: function () {
       const script = document.createElement('script');
-      script.type = 'application/octet-stream';
-      // script.type = 'text/javascript';
-      script.src = iframeExt;
-      // script.src = api.configuration.base_url + '/helpdesk_widget/iframe.js';
+      // script.type = 'application/octet-stream';
+      // script.src = iframeExt;
+      script.type = 'text/javascript';
+      script.src = api.configuration.base_url + '/helpdesk_widget/iframe.js';
 
       setTimeout(() => {
         console.log('script element', script, this.iframe);
@@ -425,12 +425,12 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       this.form.acceptCharset = 'UTF-8';
       this.form.method = 'post';
       this.form.id = 'widget_form';
-      // this.form.setAttribute('onSubmit', 'submitTicketForm(); return false;');
+      this.form.setAttribute('onSubmit', 'submitTicketForm(); return false;');
       // this.form.setAttribute('onSubmit', 'submitTicketForm(' + api.configuration.base_url + '); return false;');
-      this.form.setAttribute(
-        'onSubmit',
-        'submitTicketForm("' + api.configuration.base_url + '"); return false;',
-      );
+      // this.form.setAttribute(
+      //   'onSubmit',
+      //   'submitTicketForm("' + api.configuration.base_url + '"); return false;',
+      // );
 
       this.form.style.marginBottom = 0;
     },
