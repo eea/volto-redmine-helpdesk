@@ -21,7 +21,6 @@ function getXmlHttp() {
 }
 
 export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
-  console.log(widget_button);
   const api = {
     widget: document.getElementById('helpdesk_widget'),
     widget_button,
@@ -100,7 +99,6 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       this.apply_animation();
       this.widget_button.addEventListener('click', function () {
         api.toggle();
-        console.log('clicked');
       });
     },
     load_schema: function () {
@@ -114,8 +112,6 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
         if (xmlhttp.readyState === 4) {
           if (xmlhttp.status === 200 || xmlhttp.status === 304) {
             api.schema = xmlhttp.response;
-            console.log('xmlhttp', xmlhttp, xmlhttp.response, api.schema);
-            console.log(api.configuration);
 
             var tracker = {};
             api.schema.projects[api.configuration.redmineProjectLabel] = Number(
@@ -217,7 +213,6 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       iframe.setAttribute('name', 'helpdesk_widget_iframe');
     },
     appendToIframe: function (element) {
-      console.log('iframe', this.iframe);
       if (this.iframe)
         this.iframe.contentWindow?.document.body.appendChild(element);
     },

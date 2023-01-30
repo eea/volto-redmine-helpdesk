@@ -8,7 +8,6 @@ const HelpdeskView = (props) => {
   React.useEffect(() => {
     const widget_button = document.getElementById('widget_button');
     const redmineWidget = RedmineHelpdeskWidgetFactory({ widget_button });
-    console.log(props);
 
     redmineWidget.load();
     redmineWidget.config({
