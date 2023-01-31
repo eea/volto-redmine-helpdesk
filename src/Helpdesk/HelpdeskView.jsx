@@ -194,9 +194,7 @@ const HelpdeskView = (props) => {
       const captcha = form.querySelector('.frc-captcha');
 
       let options = async function () {
-        var url = expandToBackendURL(
-          '@registry/eea.kitkat.browser.captcha.ICaptchaSettings.username',
-        );
+        var url = expandToBackendURL('@captchakey');
         const api = new Api();
         let key = await api.get(url);
         return { sitekey: key };
