@@ -138,7 +138,7 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       xmlhttp.send(null);
     },
     create_widget_button: function () {
-      const button = document.createElement('div');
+      const button = document.querySelector('#widget_button');
       button.id = 'widget_button';
       button.className = 'widget_button';
       button.innerHTML = '?';
