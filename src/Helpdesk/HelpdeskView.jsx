@@ -2,7 +2,7 @@
 import React from 'react';
 import { RedmineHelpdeskWidgetFactory } from './widget';
 import '../captcha/widget';
-import { addAppURL, expandToBackendURL, Api } from '@plone/volto/helpers';
+import { expandToBackendURL, Api } from '@plone/volto/helpers';
 
 const HelpdeskView = (props) => {
   React.useEffect(() => {
@@ -217,7 +217,9 @@ const HelpdeskView = (props) => {
       //   '500px';
       document.getElementById('helpdesk_ticket_container').style.width = '100%';
 
-      let verifyCaptcha = async function (event) {
+      form.setAttribute('onSubmit', '');
+
+      let verifyCaptcha = async function () {
         var url = expandToBackendURL('@captchaverify');
         const api = new Api();
         const helpdesk_container = document.getElementById(
@@ -232,16 +234,24 @@ const HelpdeskView = (props) => {
           headers: { 'Content-Type': 'application/json' },
         };
         const result = JSON.parse(await api.post(url, post_options));
-
-        if (result) {
-          // pass
-        } else {
-          event.preventDefault();
-        }
         return result;
       };
 
-      form.addEventListener('submit', verifyCaptcha);
+      async function verify(event) {
+        event.preventDefault();
+        let result = await verifyCaptcha();
+        if (result) {
+          event.target.setAttribute(
+            'onSubmit',
+            'submitTicketForm(); return false;',
+          );
+          return true;
+        } else {
+          return false;
+        }
+      }
+
+      form.addEventListener('submit', verify);
     }, 1000);
     return () => clearTimeout(timer);
   }, []);

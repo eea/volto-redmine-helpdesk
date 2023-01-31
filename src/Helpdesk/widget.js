@@ -138,7 +138,7 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       xmlhttp.send(null);
     },
     create_widget_button: function () {
-      const button = document.createElement('div');
+      const button = document.querySelector('#widget_button');
       button.id = 'widget_button';
       button.className = 'widget_button';
       button.innerHTML = '?';
@@ -187,6 +187,7 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
     create_iframe: function () {
       this.iframe = document.createElement('iframe');
       this.iframe.style.opacity = '0';
+      this.iframe.title = 'Ask your question';
       this.widget.appendChild(this.iframe);
 
       this.iframe.onload = function () {
@@ -406,7 +407,6 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       script.src = api.configuration.base_url + '/helpdesk_widget/iframe.js';
 
       setTimeout(() => {
-        console.log('script element', script, this.iframe);
         if (this.iframe)
           this.iframe.contentWindow?.document.head.appendChild(script);
 
@@ -425,7 +425,7 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       this.form.acceptCharset = 'UTF-8';
       this.form.method = 'post';
       this.form.id = 'widget_form';
-      this.form.setAttribute('onSubmit', 'submitTicketForm(); return false;');
+      // this.form.setAttribute('onSubmit', 'submitTicketForm(); return false;');
       // this.form.setAttribute('onSubmit', 'submitTicketForm(' + api.configuration.base_url + '); return false;');
       // this.form.setAttribute(
       //   'onSubmit',
