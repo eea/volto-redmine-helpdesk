@@ -195,7 +195,7 @@ const HelpdeskView = (props) => {
 
       let options = async function () {
         var url = expandToBackendURL(
-          '@registry/eea.kitkat.browser.captcha.ICaptchaSettings.username',
+          '@captchakey',
         );
         const api = new Api();
         let key = await api.get(url);
