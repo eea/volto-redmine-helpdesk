@@ -241,7 +241,10 @@ const HelpdeskView = (props) => {
         event.preventDefault();
         let result = await verifyCaptcha();
         if (result) {
-          event.target.setAttribute('onSubmit', 'submitTicketForm(); return false;');
+          event.target.setAttribute(
+            'onSubmit',
+            'submitTicketForm(); return false;',
+          );
           return true;
         } else {
           return false;
