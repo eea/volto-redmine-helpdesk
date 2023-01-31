@@ -217,6 +217,8 @@ const HelpdeskView = (props) => {
       //   '500px';
       document.getElementById('helpdesk_ticket_container').style.width = '100%';
 
+      form.setAttribute('onSubmit', '');
+
       let verifyCaptcha = async function () {
         var url = expandToBackendURL('@captchaverify');
         const api = new Api();
@@ -239,6 +241,7 @@ const HelpdeskView = (props) => {
         event.preventDefault();
         let result = await verifyCaptcha();
         if (result) {
+          event.target.setAttribute('onSubmit', 'submitTicketForm(); return false;');
           return true;
         } else {
           return false;

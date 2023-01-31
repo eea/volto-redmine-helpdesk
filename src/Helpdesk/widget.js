@@ -425,7 +425,7 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       this.form.acceptCharset = 'UTF-8';
       this.form.method = 'post';
       this.form.id = 'widget_form';
-      this.form.setAttribute('onSubmit', 'submitTicketForm(); return false;');
+      // this.form.setAttribute('onSubmit', 'submitTicketForm(); return false;');
       // this.form.setAttribute('onSubmit', 'submitTicketForm(' + api.configuration.base_url + '); return false;');
       // this.form.setAttribute(
       //   'onSubmit',
