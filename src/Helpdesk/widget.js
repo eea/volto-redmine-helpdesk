@@ -187,6 +187,7 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
     create_iframe: function () {
       this.iframe = document.createElement('iframe');
       this.iframe.style.opacity = '0';
+      this.iframe.title = 'Ask your question';
       this.widget.appendChild(this.iframe);
 
       this.iframe.onload = function () {
