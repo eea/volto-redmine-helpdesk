@@ -407,7 +407,6 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       script.src = api.configuration.base_url + '/helpdesk_widget/iframe.js';
 
       setTimeout(() => {
-        console.log('script element', script, this.iframe);
         if (this.iframe)
           this.iframe.contentWindow?.document.head.appendChild(script);
 
