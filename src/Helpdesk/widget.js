@@ -420,8 +420,8 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
     },
     create_form: function () {
       this.form = document.createElement('form');
-      this.form.action =
-        api.configuration.base_url + '/helpdesk_widget/create_ticket';
+      // this.form.action =
+      //   api.configuration.base_url + '/helpdesk_widget/create_ticket';
       this.form.acceptCharset = 'UTF-8';
       this.form.method = 'post';
       this.form.id = 'widget_form';
@@ -677,7 +677,10 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       var checkbox_label = document.createElement('label');
       checkbox_label.htmlFor = checkbox.id;
       // slice(3, -4) for removing wrapper <p>...</p>
-      checkbox_label.innerHTML = api.configuration.privacyPolicy.slice(3, -4);
+      checkbox_label.innerHTML = api.configuration.privacyPolicy.data.slice(
+        3,
+        -4,
+      );
 
       var links = checkbox_label.getElementsByTagName('a');
       for (var i = 0, len = links.length; i < len; i++) {
