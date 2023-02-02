@@ -321,11 +321,16 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
               ];
           }
         }
+        // this.load_project_data(
+        //   project_id ||
+        //     this.schema.projects[Object.keys(this.schema.projects)[0]],
+        //   tracker_id,
+        // );
 
         this.load_project_data(
-          project_id ||
+          api.configuration.redmineProjectId ||
             this.schema.projects[Object.keys(this.schema.projects)[0]],
-          tracker_id,
+          api.configuration.redmineProjectTrackerId,
         );
         setTimeout(() => api.appendToIframe(api.form), 1);
         this.append_scripts();
@@ -470,6 +475,9 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
         project_id =
           api.schema.projects[api.configuration['identify']['projectValue']];
       }
+      if (api.configuration.redmineProjectId) {
+        project_id = Number(api.configuration.redmineProjectId);
+      }
       if (project_id) {
         this.create_form_hidden(
           this.form,
@@ -512,16 +520,21 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       this.create_form_privacy_policy(container_div);
 
       container_div.appendChild(submit_div);
-
       if (
         api.configuration['identify'] &&
         api.schema.projects_data[project_id].trackers[
-          api.configuration['identify']['trackerValue']
+          api.configuration.redmineProjectTrackerLabel
         ]
       ) {
+        // if (
+        //   api.configuration.redmineProjectTrackerId &&
+        //   api.schema.projects_data[project_id].trackers[
+        //     api.configuration['identify']['trackerValue']
+        //   ]
+        // ) {
         tracker_id =
           api.schema.projects_data[project_id].trackers[
-            api.configuration['identify']['trackerValue']
+            api.configuration.redmineProjectTrackerLabel
           ];
         this.create_form_hidden(
           custom_div,
@@ -553,9 +566,13 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
     },
     reload_project_data: function () {
       let container_div = this.form.getElementsByClassName('container')[0];
-      const project_id = this.form.getElementsByClassName('projects')[0].value;
-      const tracker_id = container_div.getElementsByClassName('trackers')[0]
-        .value;
+      const project_id = api.configuration.redmineProjectId
+        ? api.configuration.redmineProjectId
+        : this.form.getElementsByClassName('projects')[0].value;
+
+      const tracker_id = api.configuration.redmineProjectId
+        ? api.configuration.redmineProjectId
+        : container_div.getElementsByClassName('trackers')[0].value;
 
       this.load_project_data(project_id, tracker_id);
       this.arrange_iframe();
@@ -569,7 +586,6 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       field_class,
     ) {
       let field;
-
       if (Object.keys(values).length === 1) {
         field = document.createElement('input');
         field.type = 'hidden';
