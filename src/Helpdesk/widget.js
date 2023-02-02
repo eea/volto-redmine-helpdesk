@@ -693,15 +693,14 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
       var checkbox_label = document.createElement('label');
       checkbox_label.htmlFor = checkbox.id;
       // slice(3, -4) for removing wrapper <p>...</p>
-      if (api.configuration.privacyPolicy.data === undefined) {
-        api.configuration.privacyPolicy.data =
-          '<p>I agree with the <a href="/en/about/official-documents/contact-us-privacy-statement">privacy statement</a></p>';
+      if (typeof api.configuration.privacyPolicy === 'string') {
+        checkbox_label.innerHTML = api.configuration.privacyPolicy.slice(3, -4);
+      } else {
+        checkbox_label.innerHTML = api.configuration.privacyPolicy.data.slice(
+          3,
+          -4,
+        );
       }
-      checkbox_label.innerHTML = api.configuration.privacyPolicy.data.slice(
-        3,
-        -4,
-      );
-
       var links = checkbox_label.getElementsByTagName('a');
       for (var i = 0, len = links.length; i < len; i++) {
         links[i].target = '_blank';
