@@ -11,7 +11,7 @@ export default (config) => {
     view: HelpdeskView,
     edit: HelpdeskEdit,
     restricted: false,
-    mostUsed: true,
+    mostUsed: false,
     sidebarTab: 1,
     security: {
       addPermission: [],
