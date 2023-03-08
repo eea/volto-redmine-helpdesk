@@ -80,12 +80,12 @@ const HelpdeskView = (props) => {
       asterisk_span.innerHTML = '<span class="asterisk"></span>';
 
       for (let item of form.children) {
-        if (['email', 'username', 'description'].indexOf(item.id) !== -1) {
+        if (['email', 'subject', 'description'].indexOf(item.id) !== -1) {
           let clone = asterisk_span.cloneNode();
 
           item.required = true;
-          item.parentNode.insertBefore(clone, item.nextSibling);
-          clone.outerHTML = '<span class="asterisk"></span>';
+          item.parentNode.insertBefore(clone, item);
+          clone.outerHTML = '<span class="asterisk" style="display:inline;vertical-align:super;">*</span>';
         }
       }
 
