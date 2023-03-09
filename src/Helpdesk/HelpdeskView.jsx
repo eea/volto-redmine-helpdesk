@@ -63,7 +63,7 @@ const HelpdeskView = (props) => {
     });
 
     redmineWidget.toggle();
-
+    window.redmineiframeconfig = redmineWidget.configuration;
     // add code from button click
     const timer = setTimeout(async () => {
       const helpdesk_container = document.getElementById(
@@ -77,14 +77,14 @@ const HelpdeskView = (props) => {
 
       // add asterisk + required on fields
       let asterisk_span = document.createElement('span');
-      asterisk_span.innerHTML = '<span class="asterisk"></span>';
 
       for (let item of form.children) {
         if (['email', 'subject', 'description'].indexOf(item.id) !== -1) {
           let clone = asterisk_span.cloneNode();
 
           item.required = true;
-          item.parentNode.insertBefore(clone, item);
+          item.parentNode.insertBefore(clone, item.nextSibling);
+          // item.parentNode.insertBefore(clone, item.previousSibling);
           clone.outerHTML = '<span class="asterisk" style="display:inline;vertical-align:super;">*</span>';
         }
       }
@@ -239,6 +239,10 @@ const HelpdeskView = (props) => {
 
       async function verify(event) {
         event.preventDefault();
+
+        // add correct iframe config
+        document.getElementById("helpdesk_ticket_container").contentWindow.RedmineHelpdeskIframe = { action: 'configuration', configuration: window.redmineiframeconfig };
+
         let result = await verifyCaptcha();
         if (result) {
           event.target.setAttribute(
