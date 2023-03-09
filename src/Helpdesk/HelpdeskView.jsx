@@ -86,17 +86,20 @@ const HelpdeskView = (props) => {
 
       let clone = asterisk_span.cloneNode();
       form.insertBefore(clone, form['email']);
-      clone.outerHTML = '<span class="asterisk" style="display:inline;vertical-align:super;float:right;">*</span>';
+      clone.outerHTML =
+        '<span class="asterisk" style="display:inline;vertical-align:super;float:right;">*</span>';
 
       let clone2 = asterisk_span.cloneNode();
       form.insertBefore(clone2, form['subject']);
-      clone2.outerHTML = '<span class="asterisk" style="display:inline;vertical-align:super;float:right;">*</span>';
+      clone2.outerHTML =
+        '<span class="asterisk" style="display:inline;vertical-align:super;float:right;">*</span>';
 
       let clone3 = asterisk_span.cloneNode();
       form.insertBefore(clone3, form['description']);
-      clone3.outerHTML = '<span class="asterisk" style="display:inline;vertical-align:super;float:right;">*</span>';
+      clone3.outerHTML =
+        '<span class="asterisk" style="display:inline;vertical-align:super;float:right;">*</span>';
 
-      form['username'].className = "form-control";
+      form['username'].className = 'form-control';
       // custom note/messages
       let policy = document.createElement('span');
       form.children.container.insertBefore(
@@ -249,7 +252,12 @@ const HelpdeskView = (props) => {
         event.preventDefault();
 
         // add correct iframe config
-        document.getElementById("helpdesk_ticket_container").contentWindow.RedmineHelpdeskIframe = { action: 'configuration', configuration: window.redmineiframeconfig };
+        document.getElementById(
+          'helpdesk_ticket_container',
+        ).contentWindow.RedmineHelpdeskIframe = {
+          action: 'configuration',
+          configuration: window.redmineiframeconfig,
+        };
 
         let result = await verifyCaptcha();
         if (result) {
