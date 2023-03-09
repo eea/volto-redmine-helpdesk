@@ -80,15 +80,23 @@ const HelpdeskView = (props) => {
 
       for (let item of form.children) {
         if (['email', 'subject', 'description'].indexOf(item.id) !== -1) {
-          let clone = asterisk_span.cloneNode();
-
           item.required = true;
-          item.parentNode.insertBefore(clone, item.nextSibling);
-          // item.parentNode.insertBefore(clone, item.previousSibling);
-          clone.outerHTML = '<span class="asterisk" style="display:inline;vertical-align:super;">*</span>';
         }
       }
 
+      let clone = asterisk_span.cloneNode();
+      form.insertBefore(clone, form['email']);
+      clone.outerHTML = '<span class="asterisk" style="display:inline;vertical-align:super;float:right;">*</span>';
+
+      let clone2 = asterisk_span.cloneNode();
+      form.insertBefore(clone2, form['subject']);
+      clone2.outerHTML = '<span class="asterisk" style="display:inline;vertical-align:super;float:right;">*</span>';
+
+      let clone3 = asterisk_span.cloneNode();
+      form.insertBefore(clone3, form['description']);
+      clone3.outerHTML = '<span class="asterisk" style="display:inline;vertical-align:super;float:right;">*</span>';
+
+      form['username'].className = "form-control";
       // custom note/messages
       let policy = document.createElement('span');
       form.children.container.insertBefore(
