@@ -63,7 +63,7 @@ const HelpdeskView = (props) => {
     });
 
     redmineWidget.toggle();
-
+    window.redmineiframeconfig = redmineWidget.configuration;
     // add code from button click
     const timer = setTimeout(async () => {
       const helpdesk_container = document.getElementById(
@@ -77,18 +77,29 @@ const HelpdeskView = (props) => {
 
       // add asterisk + required on fields
       let asterisk_span = document.createElement('span');
-      asterisk_span.innerHTML = '<span class="asterisk"></span>';
 
       for (let item of form.children) {
-        if (['email', 'username', 'description'].indexOf(item.id) !== -1) {
-          let clone = asterisk_span.cloneNode();
-
+        if (['email', 'subject', 'description'].indexOf(item.id) !== -1) {
           item.required = true;
-          item.parentNode.insertBefore(clone, item.nextSibling);
-          clone.outerHTML = '<span class="asterisk"></span>';
         }
       }
 
+      let clone = asterisk_span.cloneNode();
+      form.insertBefore(clone, form['email']);
+      clone.outerHTML =
+        '<span class="asterisk" style="display:inline;vertical-align:super;float:right;">*</span>';
+
+      let clone2 = asterisk_span.cloneNode();
+      form.insertBefore(clone2, form['subject']);
+      clone2.outerHTML =
+        '<span class="asterisk" style="display:inline;vertical-align:super;float:right;">*</span>';
+
+      let clone3 = asterisk_span.cloneNode();
+      form.insertBefore(clone3, form['description']);
+      clone3.outerHTML =
+        '<span class="asterisk" style="display:inline;vertical-align:super;float:right;">*</span>';
+
+      form['username'].className = 'form-control';
       // custom note/messages
       let policy = document.createElement('span');
       form.children.container.insertBefore(
@@ -239,6 +250,15 @@ const HelpdeskView = (props) => {
 
       async function verify(event) {
         event.preventDefault();
+
+        // add correct iframe config
+        document.getElementById(
+          'helpdesk_ticket_container',
+        ).contentWindow.RedmineHelpdeskIframe = {
+          action: 'configuration',
+          configuration: window.redmineiframeconfig,
+        };
+
         let result = await verifyCaptcha();
         if (result) {
           event.target.setAttribute(
