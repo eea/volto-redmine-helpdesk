@@ -109,17 +109,19 @@ const HelpdeskView = (props) => {
       policy.outerHTML =
         "<p><span class='discreet'>* mandatory fields</span></p>";
 
-      let discreets = form.getElementsByClassName('discreet');
-      for (let item in discreets) {
-        if (item === 'length') {
-          break;
+      let discreets;
+      discreets = form.getElementsByClassName('discreet');
+      if (discreets !== undefined) {
+        for (let item in discreets) {
+          if (item === 'length') {
+            break;
+          }
+          discreets[item].style.color = '#666';
+          discreets[item].style.fontSize = '85%';
+          discreets[item].style.fontWeight = 'normal';
+          discreets[item].style.display = 'block';
         }
-        discreets[item].style.color = '#666';
-        discreets[item].style.fontSize = '85%';
-        discreets[item].style.fontWeight = 'normal';
-        discreets[item].style.display = 'block';
       }
-
       // custom fields
       let enquiry_field = document.createElement('p');
       enquiry_field.innerHTML =
