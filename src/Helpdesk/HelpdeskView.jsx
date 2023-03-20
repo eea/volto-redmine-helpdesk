@@ -111,7 +111,7 @@ const HelpdeskView = (props) => {
 
       let discreets = form.getElementsByClassName('discreet');
       for (let item in discreets) {
-        if (item === 'length') {
+        if (item === 'length' || item === 'item') {
           break;
         }
         discreets[item].style.color = '#666';
