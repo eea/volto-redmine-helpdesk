@@ -79,6 +79,7 @@ function _iterableToArrayLimit(arr, i) {
     try {
       if (!_n && _i['return'] != null) _i['return']();
     } finally {
+      // NOSONAR
       if (_d) throw _e;
     }
   }
