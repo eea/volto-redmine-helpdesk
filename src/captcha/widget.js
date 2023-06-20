@@ -78,10 +78,14 @@ function _iterableToArrayLimit(arr, i) {
   } finally {
     try {
       if (!_n && _i['return'] != null) _i['return']();
-    } finally {
-      if (_d) throw _e;
+    } catch (e) {
+      if (!_d) {
+        _d = true;
+        _e = e;
+      }
     }
   }
+  if (_d) throw _e;
   return _arr;
 }
 
