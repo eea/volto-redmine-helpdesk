@@ -18,7 +18,7 @@
 
 ## Features
 
-![Redmine Helpdesk](./docs/volto-redmine-helpdesk.gif)
+![Redmine Helpdesk](https://raw.githubusercontent.com/eea/volto-redmine-helpdesk/master/docs/volto-redmine-helpdesk.gif)
 
 ## Getting started
 
