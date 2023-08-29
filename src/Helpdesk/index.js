@@ -1,2 +1,2 @@
-export HelpdeskView from './HelpdeskView';
-export HelpdeskEdit from './HelpdeskEdit';
+export { default as HelpdeskView } from './HelpdeskView';
+export { default as HelpdeskEdit } from './HelpdeskEdit';
