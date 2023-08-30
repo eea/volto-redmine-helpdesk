@@ -14,40 +14,52 @@
 [![Bugs](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-redmine-helpdesk-develop&metric=bugs)](https://sonarqube.eea.europa.eu/dashboard?id=volto-redmine-helpdesk-develop)
 [![Duplicated Lines (%)](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-redmine-helpdesk-develop&metric=duplicated_lines_density)](https://sonarqube.eea.europa.eu/dashboard?id=volto-redmine-helpdesk-develop)
 
-
 [Volto](https://github.com/plone/volto) add-on
 
 ## Features
 
-Demo GIF
+![Redmine Helpdesk](https://raw.githubusercontent.com/eea/volto-redmine-helpdesk/master/docs/volto-redmine-helpdesk.gif)
 
 ## Getting started
+
+### Try volto-redmine-helpdesk with Docker
+
+      git clone https://github.com/eea/volto-redmine-helpdesk.git
+      cd volto-redmine-helpdesk
+      make
+      make start
+
+Go to http://localhost:3000
 
 ### Add volto-redmine-helpdesk to your Volto project
 
 1. Make sure you have a [Plone backend](https://plone.org/download) up-and-running at http://localhost:8080/Plone
 
+   ```Bash
+   docker compose up backend
+   ```
+
 1. Start Volto frontend
 
-* If you already have a volto project, just update `package.json`:
+- If you already have a volto project, just update `package.json`:
 
-   ```JSON
-   "addons": [
-       "@eeacms/volto-redmine-helpdesk"
-   ],
+  ```JSON
+  "addons": [
+      "@eeacms/volto-redmine-helpdesk"
+  ],
 
-   "dependencies": {
-       "@eeacms/volto-redmine-helpdesk": "*"
-   }
-   ```
+  "dependencies": {
+      "@eeacms/volto-redmine-helpdesk": "*"
+  }
+  ```
 
-* If not, create one:
+- If not, create one:
 
-   ```
-   npm install -g yo @plone/generator-volto
-   yo @plone/volto my-volto-project --canary --addon @eeacms/volto-redmine-helpdesk
-   cd my-volto-project
-   ```
+  ```
+  npm install -g yo @plone/generator-volto
+  yo @plone/volto my-volto-project --canary --addon @eeacms/volto-redmine-helpdesk
+  cd my-volto-project
+  ```
 
 1. Install new add-ons and restart Volto:
 
