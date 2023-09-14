@@ -7,7 +7,7 @@ jest.mock('./helpdesk_widget/load_form.pro', () => {
 describe('RedmineHelpdeskWidgetFactory', () => {
   let api;
   let widgetButton;
-
+  let mockAppendChild;
   let mockXHR = {
     open: jest.fn(),
     send: jest.fn(),
@@ -24,7 +24,6 @@ describe('RedmineHelpdeskWidgetFactory', () => {
     setRequestHeader: jest.fn(),
     onreadystatechange: jest.fn(),
   };
-  window.XMLHttpRequest = jest.fn(() => mockXHR);
 
   beforeEach(() => {
     document.body.innerHTML = '<div id="helpdesk_widget"></div>';
@@ -35,6 +34,14 @@ describe('RedmineHelpdeskWidgetFactory', () => {
     api = RedmineHelpdeskWidgetFactory({
       widget_button: widgetButton,
     });
+    mockAppendChild = jest
+      .spyOn(document.head, 'appendChild')
+      .mockImplementation(() => {});
+    window.XMLHttpRequest = jest.fn(() => mockXHR);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should initialize correctly', () => {
@@ -461,5 +468,293 @@ describe('RedmineHelpdeskWidgetFactory', () => {
     api.fill_form();
 
     jest.advanceTimersByTime(1);
+  });
+
+  it('should apply avatar when avatar exists and request is successful', () => {
+    api.configuration = { base_url: 'http://example.com' };
+    api.configuration['user_avatar'] = 'avatar123';
+    api.apply_avatar();
+    mockXHR.status = 200;
+
+    expect(mockXHR.open).toHaveBeenCalledWith(
+      'GET',
+      'http://example.com/helpdesk_widget/avatar/avatar123',
+      true,
+    );
+
+    mockXHR.onreadystatechange();
+
+    const button = document.getElementById('widget_button');
+    expect(button.style.backgroundSize).toBe('cover');
+    expect(button.style.backgroundImage).toBe(
+      'url(http://example.com/helpdesk_widget/avatar/avatar123)',
+    );
+    expect(button.innerHTML).toBe('&nbsp;');
+  });
+
+  it('should not apply avatar when request is unsuccessful', () => {
+    api.configuration['user_avatar'] = 'avatar123';
+    mockXHR.status = 404;
+    api.apply_avatar();
+
+    mockXHR.onreadystatechange();
+
+    const button = document.getElementById('widget_button');
+    expect(button.style.backgroundSize).toBe('15px 15px');
+    expect(button.innerHTML).toBe('?');
+  });
+
+  it('should not apply avatar when avatar does not exist', () => {
+    api.apply_avatar();
+    const button = document.getElementById('widget_button');
+    expect(button.style.lineHeight).toBe('54px');
+    expect(button.style.backgroundSize).toBe('15px 15px');
+    expect(button.innerHTML).toBe('?');
+  });
+
+  it('should not apply avatar when avatar does not exist', () => {
+    mockXHR.readyState = 3;
+    api.apply_avatar();
+    mockXHR.onreadystatechange();
+
+    const button = document.getElementById('widget_button');
+    expect(button.style.lineHeight).toBe('54px');
+    expect(button.style.backgroundSize).toBe('15px 15px');
+    expect(button.innerHTML).toBe('?');
+  });
+
+  it('should append stylesheets to iframe head', () => {
+    api.configuration = {
+      base_url: 'http://example.com',
+    };
+
+    api.append_stylesheets();
+
+    expect(mockAppendChild).not.toHaveBeenCalled();
+  });
+
+  it('should apply animation by appending a link element to head', () => {
+    api.configuration = { base_url: 'http://example.com' };
+    api.apply_animation();
+
+    expect(mockAppendChild).toHaveBeenCalled();
+
+    const appendedElement = mockAppendChild.mock.calls[0][0];
+
+    expect(appendedElement.tagName).toBe('LINK');
+    expect(appendedElement.href).toBe(
+      'http://example.com/helpdesk_widget/animation.css',
+    );
+    expect(appendedElement.rel).toBe('stylesheet');
+    expect(appendedElement.type).toBe('text/css');
+  });
+
+  it('should append stylesheets to iframe head', () => {
+    api.configuration = {
+      base_url: 'http://example.com',
+      styles: 'some styles',
+    };
+    api.iframe = {
+      contentWindow: {
+        document: {
+          head: {
+            appendChild: mockAppendChild,
+          },
+        },
+      },
+    };
+    api.append_stylesheets();
+
+    const appendedLinkElement = mockAppendChild.mock.calls[0][0];
+    expect(appendedLinkElement.tagName).toBe('LINK');
+    expect(appendedLinkElement.href).toBe(
+      'http://example.com/helpdesk_widget/widget.css',
+    );
+    expect(appendedLinkElement.rel).toBe('stylesheet');
+    expect(appendedLinkElement.type).toBe('text/css');
+
+    const appendedStyleElement = mockAppendChild.mock.calls[1][0];
+    expect(appendedStyleElement.tagName).toBe('STYLE');
+    expect(appendedStyleElement.innerHTML).toBe('some styles');
+    expect(appendedStyleElement.type).toBe('text/css');
+  });
+
+  it('should append scripts to iframe head', () => {
+    api.configuration = { base_url: 'http://example.com' };
+    api.iframe = {
+      contentWindow: {
+        document: {
+          head: {
+            appendChild: mockAppendChild,
+          },
+        },
+      },
+    };
+    api.append_scripts();
+
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+
+    jest.runAllTimers();
+
+    expect(mockAppendChild).toHaveBeenCalledTimes(2);
+
+    const appendedScriptElement = mockAppendChild.mock.calls[0][0];
+    expect(appendedScriptElement.tagName).toBe('SCRIPT');
+    expect(appendedScriptElement.src).toBe(
+      'http://example.com/helpdesk_widget/iframe.js',
+    );
+    expect(appendedScriptElement.type).toBe('text/javascript');
+
+    const appendedConfigScriptElement = mockAppendChild.mock.calls[1][0];
+    expect(appendedConfigScriptElement.tagName).toBe('SCRIPT');
+    expect(appendedConfigScriptElement.innerHTML).toBe(
+      'var RedmineHelpdeskIframe = {configuration: ' +
+        JSON.stringify(api.configuration) +
+        '}',
+    );
+  });
+
+  it('should create and append title div if title is provided', () => {
+    api.configuration = { title: 'Test Title' };
+    api.form = {
+      appendChild: mockAppendChild,
+    };
+
+    api.create_form_title();
+
+    expect(mockAppendChild).toHaveBeenCalledTimes(1);
+
+    const appendedTitleDiv = mockAppendChild.mock.calls[0][0];
+    expect(appendedTitleDiv.tagName).toBe('DIV');
+    expect(appendedTitleDiv.id).toBe('title');
+    expect(appendedTitleDiv.className).toBe('title');
+    expect(appendedTitleDiv.innerHTML).toBe('Test Title');
+  });
+
+  it('should not append title div if no title is provided', () => {
+    api.configuration = {};
+
+    api.create_form_title();
+
+    expect(mockAppendChild).not.toHaveBeenCalled();
+  });
+
+  it('should create and append container div and its children', () => {
+    api.form = {
+      appendChild: mockAppendChild,
+      getElementsByClassName: jest.fn(() => [{ remove: jest.fn() }]),
+    };
+    api.schema = {
+      projects_data: {
+        1: {
+          trackers: { 'Test Tracker': 2 },
+        },
+      },
+    };
+    api.configuration = {
+      identify: true,
+      redmineProjectTrackerLabel: 'Test Tracker',
+      privacyPolicy: 'https://example.com/privacy-policy',
+    };
+
+    api.create_form_hidden = jest.fn();
+    api.create_form_select = jest.fn();
+    api.load_custom_fields = jest.fn();
+    api.create_form_submit = jest.fn();
+    api.create_attch_link = jest.fn();
+    api.create_form_privacy_policy = jest.fn();
+
+    api.load_project_data(1, 2);
+
+    expect(mockAppendChild).toHaveBeenCalledTimes(1);
+
+    expect(api.create_form_hidden).toHaveBeenCalled();
+    expect(api.create_form_privacy_policy).toHaveBeenCalled();
+    expect(api.load_custom_fields).toHaveBeenCalled();
+    expect(api.create_form_submit).toHaveBeenCalled();
+    expect(api.create_attch_link).toHaveBeenCalled();
+  });
+
+  it('should not create hidden tracker_id if tracker is not in schema', () => {
+    api.form = {
+      appendChild: mockAppendChild,
+      getElementsByClassName: jest.fn(() => [{ remove: jest.fn() }]),
+    };
+    api.schema = {
+      projects_data: {
+        1: {
+          trackers: { 'Test Tracker': 2 },
+        },
+      },
+    };
+    api.configuration = {
+      identify: true,
+      redmineProjectTrackerLabel: 'Nonexistent Tracker',
+      privacyPolicy: 'https://example.com/privacy-policy',
+    };
+
+    api.create_form_hidden = jest.fn();
+    api.load_custom_fields = jest.fn();
+    api.create_form_submit = jest.fn();
+    api.create_attch_link = jest.fn();
+    api.create_form_privacy_policy = jest.fn();
+
+    api.load_project_data(1, 2);
+
+    expect(api.create_form_hidden).not.toHaveBeenCalledWith(
+      expect.anything(),
+      'tracker_id',
+      'tracker_id',
+      'form-control trackers',
+      expect.anything(),
+    );
+  });
+
+  it.only('should call load_project_data with correct project_id and tracker_id', () => {
+    api.form = {
+      getElementsByClassName: jest.fn(),
+      appendChild: jest.fn(),
+    };
+    const mockContainerDiv = {
+      getElementsByClassName: jest.fn(),
+    };
+
+    mockContainerDiv.getElementsByClassName.mockReturnValue([
+      { value: 'mockTrackerId' },
+    ]);
+    api.form.getElementsByClassName.mockReturnValueOnce([mockContainerDiv]);
+
+    api.form.getElementsByClassName.mockReturnValueOnce([
+      { value: 'mockProjectId' },
+    ]);
+
+    api.configuration = {
+      redmineProjectId: null,
+    };
+
+    api.reload_project_data();
+
+    expect(api.load_project_data).toHaveBeenCalledWith(
+      'mockProjectId',
+      'mockTrackerId',
+    );
+    expect(api.arrange_iframe).toHaveBeenCalled();
+  });
+
+  it('should use redmineProjectId from configuration if available', () => {
+    api.configuration = {
+      redmineProjectId: 'configProjectId',
+    };
+    api.form = {
+      getElementsByClassName: jest.fn(),
+      appendChild: jest.fn(),
+    };
+
+    api.reload_project_data();
+
+    expect(api.load_project_data).toHaveBeenCalledWith(
+      'configProjectId',
+      'configProjectId',
+    );
   });
 });
