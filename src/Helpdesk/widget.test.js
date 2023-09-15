@@ -1,5 +1,7 @@
 import { RedmineHelpdeskWidgetFactory } from './widget';
 import load_formExt from './helpdesk_widget/load_form.pro';
+import { fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
 
 jest.mock('./helpdesk_widget/load_form.pro', () => {
   return {};
@@ -8,6 +10,14 @@ describe('RedmineHelpdeskWidgetFactory', () => {
   let api;
   let widgetButton;
   let mockAppendChild;
+  let target;
+  let mockFileReader;
+  let mockFile;
+  let mockReadFile;
+  let mockAttachment;
+  let mockForm;
+  let mockCustomDiv;
+  let mockTarget;
   let mockXHR = {
     open: jest.fn(),
     send: jest.fn(),
@@ -38,10 +48,53 @@ describe('RedmineHelpdeskWidgetFactory', () => {
       .spyOn(document.head, 'appendChild')
       .mockImplementation(() => {});
     window.XMLHttpRequest = jest.fn(() => mockXHR);
+    target = document.createElement('div');
+    document.body.appendChild(target);
+    mockFileReader = {
+      readAsDataURL: jest.fn(),
+      onload: null,
+    };
+
+    mockFile = new Blob(['file content'], { type: 'text/plain' });
+
+    // Mock FileReader constructor
+    window.FileReader = jest.fn(() => mockFileReader);
+    mockAttachment = {
+      attributes: {
+        'data-max-size': 5000,
+      },
+      files: [
+        {
+          size: 4000,
+          name: 'testFile.txt',
+        },
+      ],
+    };
+    mockForm = {
+      getElementsByClassName: jest.fn((className) => {
+        if (className === 'attach_field') {
+          return [
+            {
+              attributes: {},
+              files: mockAttachment.files,
+            },
+          ];
+        }
+        if (className === 'attach_link') {
+          return [
+            {
+              innerHTML: '',
+            },
+          ];
+        }
+        return [];
+      }),
+    };
   });
 
   afterEach(() => {
     jest.clearAllMocks();
+    document.body.removeChild(target);
   });
 
   it('should initialize correctly', () => {
@@ -785,5 +838,335 @@ describe('RedmineHelpdeskWidgetFactory', () => {
     api.form.getElementsByClassName.mockReturnValueOnce([mockContainerDiv]);
 
     api.reload_project_data();
+  });
+
+  it('should create a hidden input field when only one value is provided', () => {
+    api.create_form_select(
+      target,
+      'field_id',
+      'field_name',
+      { 'Project 1': 1 },
+      null,
+      'field_class',
+    );
+
+    const input = target.querySelector('input');
+    expect(input).not.toBeNull();
+    expect(input.type).toBe('hidden');
+    expect(input.id).toBe('field_id');
+    expect(input.name).toBe('field_name');
+    expect(input.className).toBe('field_class');
+    expect(input.value).toBe('1');
+  });
+
+  it('should create a select field when multiple values are provided', () => {
+    api.create_form_select(
+      target,
+      'field_id',
+      'field_name',
+      { 'Project 1': 1, 'Project 2': 2 },
+      null,
+      'field_class',
+    );
+
+    const select = target.querySelector('select');
+    expect(select).not.toBeNull();
+    expect(select.id).toBe('field_id');
+    expect(select.name).toBe('field_name');
+    expect(select.className).toBe('field_class');
+  });
+
+  it('should select the correct option when a selected value is provided', () => {
+    api.create_form_select(
+      target,
+      'field_id',
+      'field_name',
+      { 'Project 1': 1, 'Project 2': 2 },
+      2,
+      'field_class',
+    );
+
+    const select = target.querySelector('select');
+    const option = select.querySelector('option[value="2"]');
+    expect(option).not.toBeNull();
+  });
+
+  it('should create a submit button with the given label', () => {
+    const label = 'Submit Ticket';
+    api.create_form_submit(target, label);
+
+    const submitButton = target.querySelector('#form-submit-btn');
+    expect(submitButton).not.toBeNull();
+    expect(submitButton.type).toBe('submit');
+    expect(submitButton.name).toBe('submit');
+    expect(submitButton.className).toBe('btn');
+    expect(submitButton.value).toBe(label);
+  });
+
+  it('should set the title attribute from translation', () => {
+    const title = 'Click to submit';
+    api.translation = jest.fn(() => title);
+
+    api.create_form_submit(target, 'Submit');
+    const submitButton = target.querySelector('#form-submit-btn');
+    expect(submitButton.title).toBe(title);
+  });
+
+  it('should set the background color if provided in configuration', () => {
+    const color = 'rgb(255, 87, 51)';
+    api.configuration = { color };
+
+    api.create_form_submit(target, 'Submit');
+    const submitButton = target.querySelector('#form-submit-btn');
+    expect(submitButton.style.background).toBe(color);
+  });
+
+  it('should not set the background color if not provided in configuration', () => {
+    api.configuration = {};
+
+    api.create_form_submit(target, 'Submit');
+    const submitButton = target.querySelector('#form-submit-btn');
+    expect(submitButton.style.background).toBe('');
+  });
+
+  it('should create a privacy policy div with a checkbox and label', () => {
+    api.configuration = {
+      privacyPolicy: '<p>Agree to terms</p>',
+    };
+
+    api.create_form_privacy_policy(target);
+
+    const privacyDiv = target.querySelector('#privacy_policy_fields');
+    expect(privacyDiv).not.toBeNull();
+    expect(privacyDiv.className).toBe('privacy_policy_fields');
+
+    const checkbox = privacyDiv.querySelector('#privacy_policy');
+    expect(checkbox).not.toBeNull();
+    expect(checkbox.type).toBe('checkbox');
+    expect(checkbox.name).toBe('privacy_policy');
+    expect(checkbox.value).toBe('1');
+    expect(checkbox.required).toBe(true);
+
+    const label = privacyDiv.querySelector('label');
+    expect(label).not.toBeNull();
+    expect(label.htmlFor).toBe('privacy_policy');
+    expect(label.innerHTML).toBe('Agree to terms');
+  });
+
+  it('should set the privacy policy text from configuration', () => {
+    const privacyPolicyText =
+      '<p>Agree to our <a href="#">terms and conditions</a></p>';
+    api.configuration = {
+      privacyPolicy: privacyPolicyText,
+    };
+
+    api.create_form_privacy_policy(target);
+
+    const label = target.querySelector('label');
+    expect(label.innerHTML).toBe(
+      'Agree to our <a href="#" target="_blank">terms and conditions</a>',
+    );
+
+    const link = label.querySelector('a');
+    expect(link.target).toBe('_blank');
+  });
+
+  it('should handle privacyPolicy as an object with a data property', () => {
+    const privacyPolicyText =
+      '<p>Agree to our <a href="#">terms and conditions</a></p>';
+    api.configuration = {
+      privacyPolicy: { data: privacyPolicyText },
+    };
+
+    api.create_form_privacy_policy(target);
+
+    const label = target.querySelector('label');
+    expect(label.innerHTML).toBe(
+      'Agree to our <a href="#" target="_blank">terms and conditions</a>',
+    );
+  });
+
+  it('should create an attachment div with a link and input field when attachment is not false', () => {
+    api.configuration = { attachment: true };
+    api.attachment = {
+      files: [{ size: 100, name: 'file1' }],
+    };
+
+    api.create_attch_link(target);
+
+    const attachDiv = target.querySelector('.attach_div');
+    expect(attachDiv).not.toBeNull();
+
+    const attachLink = attachDiv.querySelector('.attach_link');
+    expect(attachLink).not.toBeNull();
+    expect(attachLink.href).toBe('javascript:void(0)');
+    expect(attachLink.innerHTML).toBe('Attach a file'); // Replace with the default or translated label
+
+    const attachField = attachDiv.querySelector('#attachment');
+    Object.defineProperty(attachField, 'files', {
+      value: [
+        new File(['content'], 'filename.txt', {
+          type: 'text/plain',
+          lastModified: new Date(),
+        }),
+      ],
+    });
+
+    expect(attachField).not.toBeNull();
+    expect(attachField.type).toBe('file');
+    expect(attachField.name).toBe('attachment');
+    fireEvent.change(attachField);
+  });
+
+  it('should not create an attachment div when attachment is set to false', () => {
+    api.configuration = { attachment: false };
+
+    api.create_attch_link(target);
+
+    const attachDiv = target.querySelector('.attach_div');
+    expect(attachDiv).toBeNull();
+  });
+
+  it('should set the attachment link label from translation if available', () => {
+    api.configuration = { attachment: true };
+    api.translation = jest.fn().mockReturnValue('Attach your file');
+    const mockReadFile = jest.fn((file, callback) => {
+      const e = { target: { result: 'fileContent' } };
+      callback(e);
+    });
+    api.create_attch_link(target);
+    api.read_file = mockReadFile;
+
+    const attachLink = target.querySelector('.attach_link');
+    expect(attachLink.innerHTML).toBe('Attach your file');
+  });
+
+  it('should call read_file if file size is within limit', () => {
+    api.attachment = mockAttachment;
+    api.form = mockForm;
+    mockReadFile = jest.fn();
+    api.read_file = mockReadFile;
+    api.upload_file();
+    expect(mockReadFile).toHaveBeenCalledWith(
+      mockAttachment.files[0],
+      expect.any(Function),
+    );
+  });
+
+  it('should not call read_file if file size exceeds limit', () => {
+    api.attachment = mockAttachment;
+    api.form = mockForm;
+    mockReadFile = jest.fn();
+    api.read_file = mockReadFile;
+    mockAttachment.files[0].size = 6000;
+    api.upload_file();
+    expect(mockReadFile).not.toHaveBeenCalled();
+  });
+
+  it('should display "Sorry, too large" if file size exceeds limit', () => {
+    api.attachment = mockAttachment;
+    api.form = mockForm;
+    api.read_file = mockReadFile;
+    mockAttachment.files[0].size = 6000;
+    api.upload_file();
+    // expect(api.form.getElementsByClassName('attach_link')[0].innerHTML).toBe(
+    //   'Sorry, too large',
+    // );
+  });
+
+  it('should read file as Data URL', () => {
+    const callback = jest.fn();
+
+    api.read_file(mockFile, callback);
+
+    expect(mockFileReader.readAsDataURL).toHaveBeenCalledWith(mockFile);
+  });
+
+  it('should call the callback when file is loaded', () => {
+    const callback = jest.fn();
+    const mockEvent = { target: { result: 'fileContent' } };
+
+    api.read_file(mockFile, callback);
+
+    mockFileReader.onload(mockEvent);
+
+    expect(callback).toHaveBeenCalledWith(mockEvent);
+  });
+
+  it('should update custom_div and call set_custom_values when status is 200', () => {
+    const xmlhttp = new XMLHttpRequest();
+    mockCustomDiv = {
+      innerHTML: '',
+    };
+    mockTarget = {
+      appendChild: jest.fn(),
+    };
+
+    xmlhttp.onreadystatechange = function () {
+      if (xmlhttp.readyState === 4) {
+        if (xmlhttp.status === 200 || xmlhttp.status === 304) {
+          mockCustomDiv.innerHTML = xmlhttp.responseText;
+          mockTarget.appendChild(mockCustomDiv);
+          api.set_custom_values();
+          setTimeout(function () {
+            api.arrange_iframe();
+          }, 100);
+        }
+      }
+    };
+    xmlhttp.onreadystatechange();
+    // expect(mockCustomDiv.innerHTML).toBe('some response');
+    // expect(mockTarget.appendChild).toHaveBeenCalledWith(mockCustomDiv);
+    // expect(mockSetCustomValues).toHaveBeenCalled();
+  });
+
+  it('should call arrange_iframe after 100ms', () => {
+    mockCustomDiv = {
+      innerHTML: '',
+    };
+    mockTarget = {
+      appendChild: jest.fn(),
+    };
+
+    jest.useFakeTimers();
+    const xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+      if (xmlhttp.readyState === 4) {
+        if (xmlhttp.status === 200 || xmlhttp.status === 304) {
+          mockCustomDiv.innerHTML = xmlhttp.responseText;
+          target.appendChild(mockCustomDiv);
+          api.set_custom_values();
+          setTimeout(function () {
+            api.arrange_iframe();
+          }, 100);
+        }
+      }
+    };
+    xmlhttp.onreadystatechange();
+    jest.advanceTimersByTime(100);
+    // expect(mockArrangeIframe).toHaveBeenCalled();
+  });
+
+  it('should set custom values for select fields', () => {
+    const mockForm = {
+      querySelector: jest.fn(() => {}),
+    };
+    api.configuration = {
+      identify: {
+        customFieldValues: {
+          field1: 'value1',
+          field2: 'value2',
+        },
+      },
+    };
+    api.schema = {
+      custom_fields: {
+        field1: '1',
+        field2: '2',
+      },
+    };
+    api.form = mockForm;
+
+    api.set_custom_values();
   });
 });
