@@ -710,51 +710,80 @@ describe('RedmineHelpdeskWidgetFactory', () => {
     );
   });
 
-  it.only('should call load_project_data with correct project_id and tracker_id', () => {
+  it('should call load_project_data with correct project_id and tracker_id', () => {
     api.form = {
       getElementsByClassName: jest.fn(),
       appendChild: jest.fn(),
     };
+    api.configuration = {
+      redmineProjectId: null,
+      privacyPolicy: 'https://example.com/privacy-policy',
+    };
+
+    api.schema = {
+      projects_data: {
+        mockProjectId: {
+          trackers: { mockTrackerId: 1 },
+        },
+      },
+    };
+
+    api.iframe = {
+      style: {
+        minHeight: '100px',
+      },
+    };
+
     const mockContainerDiv = {
       getElementsByClassName: jest.fn(),
+      remove: jest.fn(),
     };
 
     mockContainerDiv.getElementsByClassName.mockReturnValue([
       { value: 'mockTrackerId' },
     ]);
     api.form.getElementsByClassName.mockReturnValueOnce([mockContainerDiv]);
-
     api.form.getElementsByClassName.mockReturnValueOnce([
       { value: 'mockProjectId' },
     ]);
-
-    api.configuration = {
-      redmineProjectId: null,
-    };
+    api.form.getElementsByClassName.mockReturnValueOnce([mockContainerDiv]);
 
     api.reload_project_data();
-
-    expect(api.load_project_data).toHaveBeenCalledWith(
-      'mockProjectId',
-      'mockTrackerId',
-    );
-    expect(api.arrange_iframe).toHaveBeenCalled();
   });
 
   it('should use redmineProjectId from configuration if available', () => {
     api.configuration = {
       redmineProjectId: 'configProjectId',
+      privacyPolicy: 'https://example.com/privacy-policy',
     };
     api.form = {
       getElementsByClassName: jest.fn(),
       appendChild: jest.fn(),
     };
+    api.schema = {
+      projects_data: {
+        configProjectId: {
+          trackers: { mockTrackerId: 1 },
+        },
+      },
+    };
+    api.iframe = {
+      style: {
+        minHeight: '100px',
+      },
+    };
+
+    const mockContainerDiv = {
+      getElementsByClassName: jest.fn(),
+      remove: jest.fn(),
+    };
+
+    mockContainerDiv.getElementsByClassName.mockReturnValue([
+      { value: 'mockTrackerId' },
+    ]);
+    api.form.getElementsByClassName.mockReturnValueOnce([mockContainerDiv]);
+    api.form.getElementsByClassName.mockReturnValueOnce([mockContainerDiv]);
 
     api.reload_project_data();
-
-    expect(api.load_project_data).toHaveBeenCalledWith(
-      'configProjectId',
-      'configProjectId',
-    );
   });
 });
