@@ -16,6 +16,44 @@ describe('HelpdeskView', () => {
     RedmineHelpdeskWidgetFactory.mockReturnValue(mockWidget);
   });
 
+  it('should execute timer-based logic', () => {
+    const mockHelpdeskContainer = {
+      style: {},
+      contentWindow: {
+        document: {
+          body: {
+            children: [
+              {
+                getElementsByClassName: jest.fn(() => [{ style: {} }]),
+                children: [],
+                insertBefore: jest.fn(),
+              },
+            ],
+          },
+        },
+      },
+    };
+
+    const mockWidgetButton = {
+      style: {},
+    };
+
+    global.document.getElementById = jest.fn((id) => {
+      switch (id) {
+        case 'helpdesk_ticket_container':
+          return mockHelpdeskContainer;
+        case 'widget_button':
+          return mockWidgetButton;
+        default:
+          return null;
+      }
+    });
+
+    render(<HelpdeskView data={{}} />);
+
+    jest.runAllTimers();
+  });
+
   it('should initialize RedmineHelpdeskWidgetFactory', () => {
     render(<HelpdeskView data={{}} />);
 

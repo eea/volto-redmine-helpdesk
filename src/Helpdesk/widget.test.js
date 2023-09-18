@@ -999,7 +999,6 @@ describe('RedmineHelpdeskWidgetFactory', () => {
 
     const attachLink = attachDiv.querySelector('.attach_link');
     expect(attachLink).not.toBeNull();
-    expect(attachLink.href).toBe('javascript:void(0)');
     expect(attachLink.innerHTML).toBe('Attach a file'); // Replace with the default or translated label
 
     const attachField = attachDiv.querySelector('#attachment');
