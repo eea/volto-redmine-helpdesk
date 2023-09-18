@@ -1,8 +1,26 @@
 import React from 'react';
-import { render, act, waitFor } from '@testing-library/react';
+import { render, act, waitFor, cleanup } from '@testing-library/react';
 import HelpdeskView from './HelpdeskView';
 import { RedmineHelpdeskWidgetFactory } from './widget';
 import '@testing-library/jest-dom/extend-expect';
+
+jest.mock('@plone/volto/helpers', () => {
+  return {
+    expandToBackendURL: jest.fn((url) => url),
+    Api: {
+      get: jest.fn(() => Promise.resolve('someKey')),
+      post: jest.fn(() => Promise.resolve(JSON.stringify(true))),
+    },
+  };
+});
+
+global.window.friendlyChallenge = {
+  WidgetInstance: jest.fn().mockImplementation(() => {
+    return {
+      start: jest.fn(),
+    };
+  }),
+};
 
 jest.mock('./widget', () => ({
   RedmineHelpdeskWidgetFactory: jest.fn(),
@@ -10,10 +28,19 @@ jest.mock('./widget', () => ({
 
 describe('HelpdeskView', () => {
   let mockWidget;
+  let container;
 
   beforeEach(() => {
+    container = document.createElement('div');
+    document.body.appendChild(container);
     mockWidget = { load: jest.fn(), config: jest.fn(), toggle: jest.fn() };
     RedmineHelpdeskWidgetFactory.mockReturnValue(mockWidget);
+  });
+
+  afterEach(() => {
+    cleanup();
+    document.body.removeChild(container);
+    container = null;
   });
 
   it('should execute timer-based logic', () => {
