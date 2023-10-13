@@ -42,7 +42,7 @@ describe('Blocks Tests', () => {
     cy.get('#toolbar-save').click();
     cy.url().should('eq', Cypress.config().baseUrl + '/cypress/my-page');
     cy.contains('My Add-on Page');
-    cy.wait(2000);
+
     cy.get('#helpdesk_ticket_container', { timeout: 10000 })
       .should('exist')
       .its('0.contentWindow.document.body')
