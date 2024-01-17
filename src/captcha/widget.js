@@ -251,13 +251,7 @@ function _arrayWithHoles(arr) {
   }
 
   function findCaptchaElements() {
-    var elements = document.querySelectorAll('.frc-captcha');
-
-    if (elements.length === 0) {
-      console.warn('FriendlyCaptcha: No div was found with .frc-captcha class');
-    }
-
-    return elements;
+    return document.querySelectorAll('.frc-captcha');
   }
   /**
    * Injects the style if no #frc-style element is already present
