@@ -743,17 +743,15 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
         this.attachment.files[0].size
       ) {
         this.read_file(this.attachment.files[0], function (e) {
-          const attach_field = api.form.getElementsByClassName(
-            'attach_field',
-          )[0];
+          const attach_field =
+            api.form.getElementsByClassName('attach_field')[0];
           attach_field.attributes['data-value'] = e.target.result;
           const displayed_name =
             attach_field.files[0].name.length <= 20
               ? attach_field.files[0].name
               : attach_field.files[0].name.substring(0, 20) + '...';
-          api.form.getElementsByClassName(
-            'attach_link',
-          )[0].innerHTML = displayed_name;
+          api.form.getElementsByClassName('attach_link')[0].innerHTML =
+            displayed_name;
         });
       } else {
         this.attachment.attributes['data-value'] = '';
@@ -808,9 +806,8 @@ export const RedmineHelpdeskWidgetFactory = ({ widget_button }) => {
             switch (custom_field.tagName) {
               case 'INPUT':
                 custom_field.type = 'hidden';
-                custom_field.value = this.configuration['identify'][
-                  'customFieldValues'
-                ][cf];
+                custom_field.value =
+                  this.configuration['identify']['customFieldValues'][cf];
                 this.form.querySelector(
                   "[data-error-key='" + cf + "']",
                 ).style.display = 'none';
