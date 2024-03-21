@@ -539,8 +539,7 @@ function _arrayWithHoles(arr) {
                       } catch ($boundEx) {
                         return $Try_2_Catch($boundEx);
                       }
-                    },
-                    $Try_2_Catch);
+                    }, $Try_2_Catch);
                   } else {
                     var _json;
 
@@ -593,8 +592,7 @@ function _arrayWithHoles(arr) {
                         } catch ($boundEx) {
                           return $Try_3_Catch($boundEx);
                         }
-                      },
-                      $Try_3_Catch);
+                      }, $Try_3_Catch);
                     } catch (e) {
                       $Try_3_Catch(e);
                     }
