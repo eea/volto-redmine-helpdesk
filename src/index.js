@@ -2,7 +2,7 @@ import tableSVG from '@plone/volto/icons/table.svg';
 
 import { HelpdeskView, HelpdeskEdit } from './Helpdesk';
 
-export default (config) => {
+const config = (config) => {
   config.blocks.blocksConfig.helpdesk = {
     id: 'helpdesk',
     title: 'Helpdesk Block',
@@ -20,3 +20,5 @@ export default (config) => {
   };
   return config;
 };
+
+export default config;
