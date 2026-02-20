@@ -3,16 +3,16 @@
 [![Releases](https://img.shields.io/github/v/release/eea/volto-redmine-helpdesk)](https://github.com/eea/volto-redmine-helpdesk/releases)
 
 [![Pipeline](https://ci.eionet.europa.eu/buildStatus/icon?job=volto-addons%2Fvolto-redmine-helpdesk%2Fmaster&subject=master)](https://ci.eionet.europa.eu/view/Github/job/volto-addons/job/volto-redmine-helpdesk/job/master/display/redirect)
-[![Lines of Code](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-redmine-helpdesk-master&metric=ncloc)](https://sonarqube.eea.europa.eu/dashboard?id=volto-redmine-helpdesk-master)
-[![Coverage](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-redmine-helpdesk-master&metric=coverage)](https://sonarqube.eea.europa.eu/dashboard?id=volto-redmine-helpdesk-master)
-[![Bugs](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-redmine-helpdesk-master&metric=bugs)](https://sonarqube.eea.europa.eu/dashboard?id=volto-redmine-helpdesk-master)
-[![Duplicated Lines (%)](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-redmine-helpdesk-master&metric=duplicated_lines_density)](https://sonarqube.eea.europa.eu/dashboard?id=volto-redmine-helpdesk-master)
+[![Lines of Code](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-redmine-helpdesk&metric=ncloc)](https://sonarqube.eea.europa.eu/dashboard?id=volto-redmine-helpdesk)
+[![Coverage](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-redmine-helpdesk&metric=coverage)](https://sonarqube.eea.europa.eu/dashboard?id=volto-redmine-helpdesk)
+[![Bugs](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-redmine-helpdesk&metric=bugs)](https://sonarqube.eea.europa.eu/dashboard?id=volto-redmine-helpdesk)
+[![Duplicated Lines (%)](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-redmine-helpdesk&metric=duplicated_lines_density)](https://sonarqube.eea.europa.eu/dashboard?id=volto-redmine-helpdesk)
 
 [![Pipeline](https://ci.eionet.europa.eu/buildStatus/icon?job=volto-addons%2Fvolto-redmine-helpdesk%2Fdevelop&subject=develop)](https://ci.eionet.europa.eu/view/Github/job/volto-addons/job/volto-redmine-helpdesk/job/develop/display/redirect)
-[![Lines of Code](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-redmine-helpdesk-develop&metric=ncloc)](https://sonarqube.eea.europa.eu/dashboard?id=volto-redmine-helpdesk-develop)
-[![Coverage](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-redmine-helpdesk-develop&metric=coverage)](https://sonarqube.eea.europa.eu/dashboard?id=volto-redmine-helpdesk-develop)
-[![Bugs](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-redmine-helpdesk-develop&metric=bugs)](https://sonarqube.eea.europa.eu/dashboard?id=volto-redmine-helpdesk-develop)
-[![Duplicated Lines (%)](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-redmine-helpdesk-develop&metric=duplicated_lines_density)](https://sonarqube.eea.europa.eu/dashboard?id=volto-redmine-helpdesk-develop)
+[![Lines of Code](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-redmine-helpdesk&branch=develop&metric=ncloc)](https://sonarqube.eea.europa.eu/dashboard?id=volto-redmine-helpdesk&branch=develop)
+[![Coverage](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-redmine-helpdesk&branch=develop&metric=coverage)](https://sonarqube.eea.europa.eu/dashboard?id=volto-redmine-helpdesk&branch=develop)
+[![Bugs](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-redmine-helpdesk&branch=develop&metric=bugs)](https://sonarqube.eea.europa.eu/dashboard?id=volto-redmine-helpdesk&branch=develop)
+[![Duplicated Lines (%)](https://sonarqube.eea.europa.eu/api/project_badges/measure?project=volto-redmine-helpdesk&branch=develop&metric=duplicated_lines_density)](https://sonarqube.eea.europa.eu/dashboard?id=volto-redmine-helpdesk&branch=develop)
 
 [Volto](https://github.com/plone/volto) add-on
 
