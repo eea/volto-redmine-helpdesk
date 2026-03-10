@@ -2,7 +2,7 @@ import React from 'react';
 import { render, act, waitFor, cleanup } from '@testing-library/react';
 import HelpdeskView from './HelpdeskView';
 import { RedmineHelpdeskWidgetFactory } from './widget';
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 
 jest.mock('@plone/volto/helpers', () => {
   return {

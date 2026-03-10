@@ -1,7 +1,7 @@
 import { RedmineHelpdeskWidgetFactory } from './widget';
 import load_formExt from './helpdesk_widget/load_form.pro';
 import { fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 
 jest.mock('./helpdesk_widget/load_form.pro', () => {
   return {};
