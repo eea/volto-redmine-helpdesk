@@ -2,7 +2,8 @@ import React from 'react';
 import { render, waitFor, cleanup } from '@testing-library/react';
 import HelpdeskView from './HelpdeskView';
 import { RedmineHelpdeskWidgetFactory } from './widget';
-import { Api, expandToBackendURL } from '@plone/volto/helpers';
+import Api from '@plone/volto/helpers/Api/Api';
+import { expandToBackendURL } from '@plone/volto/helpers/Url/Url';
 import '@testing-library/jest-dom';
 
 const mockApiGet = jest.fn();
