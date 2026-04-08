@@ -2,7 +2,8 @@
 import React from 'react';
 import { RedmineHelpdeskWidgetFactory } from './widget';
 import '../captcha/widget';
-import { expandToBackendURL, Api } from '@plone/volto/helpers';
+import Api from '@plone/volto/helpers/Api/Api';
+import { expandToBackendURL } from '@plone/volto/helpers/Url/Url';
 
 const HelpdeskView = (props) => {
   React.useEffect(() => {
