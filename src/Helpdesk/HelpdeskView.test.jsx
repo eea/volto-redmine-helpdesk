@@ -10,7 +10,7 @@ const mockApiGet = jest.fn();
 const mockApiPost = jest.fn();
 const mockWidgetStart = jest.fn();
 
-jest.mock('../captcha/widget', () => ({}));
+jest.mock('@eeacms/volto-redmine-helpdesk/captcha/widget', () => ({}));
 
 jest.mock('@plone/volto/helpers', () => ({
   expandToBackendURL: jest.fn((url) => url),
