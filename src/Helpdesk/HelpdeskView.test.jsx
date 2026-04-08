@@ -12,13 +12,16 @@ const mockWidgetStart = jest.fn();
 
 jest.mock('@eeacms/volto-redmine-helpdesk/captcha/widget', () => ({}));
 
-jest.mock('@plone/volto/helpers', () => ({
+jest.mock('@plone/volto/helpers/Url/Url', () => ({
   expandToBackendURL: jest.fn((url) => url),
-  Api: jest.fn().mockImplementation(() => ({
+}));
+
+jest.mock('@plone/volto/helpers/Api/Api', () =>
+  jest.fn().mockImplementation(() => ({
     get: mockApiGet,
     post: mockApiPost,
   })),
-}));
+);
 
 jest.mock('./widget', () => ({
   RedmineHelpdeskWidgetFactory: jest.fn(),
