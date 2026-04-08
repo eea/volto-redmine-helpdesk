@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React from 'react';
 import { RedmineHelpdeskWidgetFactory } from './widget';
-import '../captcha/widget';
+import '@eeacms/volto-redmine-helpdesk/captcha/widget';
 import Api from '@plone/volto/helpers/Api/Api';
 import { expandToBackendURL } from '@plone/volto/helpers/Url/Url';
 
