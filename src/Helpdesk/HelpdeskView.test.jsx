@@ -2,22 +2,26 @@ import React from 'react';
 import { render, waitFor, cleanup } from '@testing-library/react';
 import HelpdeskView from './HelpdeskView';
 import { RedmineHelpdeskWidgetFactory } from './widget';
-import { Api, expandToBackendURL } from '@plone/volto/helpers';
+import Api from '@plone/volto/helpers/Api/Api';
+import { expandToBackendURL } from '@plone/volto/helpers/Url/Url';
 import '@testing-library/jest-dom';
 
 const mockApiGet = jest.fn();
 const mockApiPost = jest.fn();
 const mockWidgetStart = jest.fn();
 
-jest.mock('../captcha/widget', () => ({}));
+jest.mock('@eeacms/volto-redmine-helpdesk/captcha/widget', () => ({}));
 
-jest.mock('@plone/volto/helpers', () => ({
+jest.mock('@plone/volto/helpers/Url/Url', () => ({
   expandToBackendURL: jest.fn((url) => url),
-  Api: jest.fn().mockImplementation(() => ({
+}));
+
+jest.mock('@plone/volto/helpers/Api/Api', () =>
+  jest.fn().mockImplementation(() => ({
     get: mockApiGet,
     post: mockApiPost,
   })),
-}));
+);
 
 jest.mock('./widget', () => ({
   RedmineHelpdeskWidgetFactory: jest.fn(),
