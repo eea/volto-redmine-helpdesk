@@ -70,6 +70,7 @@ const HelpdeskView = (props) => {
       const helpdesk_container = document.getElementById(
         'helpdesk_ticket_container',
       );
+      if (!helpdesk_container?.contentWindow) return;
       const form = helpdesk_container.contentWindow.document.body.children[0];
 
       widget_button.style.display = 'none';
