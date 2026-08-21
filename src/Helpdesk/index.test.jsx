@@ -1,11 +1,11 @@
 import React from 'react';
 
-jest.mock('./HelpdeskEdit', () => () => <div>Edit</div>);
-jest.mock('./HelpdeskView', () => () => <div>View</div>);
+vi.mock('./HelpdeskEdit', () => ({ default: () => <div>Edit</div> }));
+vi.mock('./HelpdeskView', () => ({ default: () => <div>View</div> }));
 
-const { HelpdeskEdit, HelpdeskView } = require('./index');
-const HelpdeskEditComponent = require('./HelpdeskEdit');
-const HelpdeskViewComponent = require('./HelpdeskView');
+const { HelpdeskEdit, HelpdeskView } = await import('./index');
+const HelpdeskEditComponent = (await import('./HelpdeskEdit')).default;
+const HelpdeskViewComponent = (await import('./HelpdeskView')).default;
 
 describe('Helpdesk exports', () => {
   it('re-exports the edit and view components', () => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import tableSVG from '@plone/volto/icons/table.svg';
 
-jest.mock('./Helpdesk', () => {
+vi.mock('./Helpdesk', () => {
   const HelpdeskView = () => <div>View</div>;
   const HelpdeskEdit = () => <div>Edit</div>;
 
@@ -11,8 +11,8 @@ jest.mock('./Helpdesk', () => {
   };
 });
 
-const config = require('./index').default;
-const { HelpdeskView, HelpdeskEdit } = require('./Helpdesk');
+const config = (await import('./index')).default;
+const { HelpdeskView, HelpdeskEdit } = await import('./Helpdesk');
 
 describe('addon config', () => {
   it('registers the helpdesk block', () => {
