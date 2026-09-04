@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { RedmineHelpdeskWidgetFactory } from './widget';
 import load_formExt from './helpdesk_widget/load_form.pro';
 import { fireEvent } from '@testing-library/react';
@@ -6,6 +7,7 @@ import '@testing-library/jest-dom';
 vi.mock('./helpdesk_widget/load_form.pro', () => {
   return { default: '/helpdesk_widget/load_form' };
 });
+vi.mock('./helpdesk_widget/widgetcss.pro', () => ({ default: '' }));
 describe('RedmineHelpdeskWidgetFactory', () => {
   let api;
   let widgetButton;
