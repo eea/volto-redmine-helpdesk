@@ -3,16 +3,18 @@ import { render, fireEvent } from '@testing-library/react';
 import HelpdeskEdit from './HelpdeskEdit';
 import '@testing-library/jest-dom';
 
-jest.mock('@plone/volto/components/manage/Sidebar/SidebarPortal', () => {
-  return ({ children }) => <div>{children}</div>;
+vi.mock('@plone/volto/components/manage/Sidebar/SidebarPortal', () => {
+  return { default: ({ children }) => <div>{children}</div> };
 });
 
-jest.mock('@plone/volto/components/manage/Form/BlockDataForm', () => {
-  return ({ onChangeField }) => (
-    <button onClick={() => onChangeField('testField', 'testValue')}>
-      Change Field
-    </button>
-  );
+vi.mock('@plone/volto/components/manage/Form/BlockDataForm', () => {
+  return {
+    default: ({ onChangeField }) => (
+      <button onClick={() => onChangeField('testField', 'testValue')}>
+        Change Field
+      </button>
+    ),
+  };
 });
 
 describe('HelpdeskEdit component', () => {
@@ -30,7 +32,7 @@ describe('HelpdeskEdit component', () => {
   });
 
   it('updates block data correctly', () => {
-    const mockOnChangeBlock = jest.fn();
+    const mockOnChangeBlock = vi.fn();
     const { getByText } = render(
       <HelpdeskEdit
         onChangeBlock={mockOnChangeBlock}
