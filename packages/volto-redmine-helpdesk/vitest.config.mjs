@@ -274,6 +274,9 @@ export default defineConfig({
         'src/**/index.{js,jsx,ts,tsx}',
         'src/**/*config.{js,jsx,ts,tsx}',
         'src/**/*schema.{js,jsx,ts,tsx}',
+        // Vendored captcha bundle: master's jest ignored
+        // 'src/addons/volto-redmine-helpdesk/src/captcha/**' for coverage.
+        'src/captcha/**',
       ],
       thresholds: {
         branches: 5,

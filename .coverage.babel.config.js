@@ -21,6 +21,11 @@ module.exports = function (api) {
     {
       cwd: workspaceRoot,
       include: ['packages/*/src/**'],
+      // Vendored captcha bundle, ignored for coverage before the migration
+      // (master's jest collectCoverageFrom excluded src/addons/**/captcha/**);
+      // without this it comes back through the integration lcov and drags the
+      // Sonar coverage ratio to ~41%.
+      exclude: ['packages/*/src/**/captcha/**'],
     },
   ]);
   return voltoBabel;
