@@ -218,9 +218,12 @@ const HelpdeskView = (props) => {
       const captcha_widget = new WidgetInstance(captcha, result);
       captcha_widget.start();
 
-      document.getElementById('widget_button').click();
-      document.getElementById('widget_button').style.cssText = '';
-      document.getElementById('widget_button').style.display = 'none';
+      const widgetButton = document.getElementById('widget_button');
+      if (!widgetButton) return;
+
+      widgetButton.click();
+      widgetButton.style.cssText = '';
+      widgetButton.style.display = 'none';
 
       document.getElementById('helpdesk_widget').style.cssText = '';
       document.getElementById('helpdesk_ticket_container').style.position = '';
