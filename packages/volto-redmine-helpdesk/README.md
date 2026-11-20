@@ -6,6 +6,19 @@
 
 [Volto](https://github.com/plone/volto) add-on
 
+## Upgrade
+
+### Upgrading to 3.x
+
+> This version requires `Volto 18` or `Volto 19` and Node.js 22.
+
+The sources are unchanged beyond the layout move: the block id, its schema fields and the widget are identical to 2.0.3. The published package now lives in `packages/volto-redmine-helpdesk`.
+
+#### Breaking changes
+
+- **Node.js 22 or newer is required** (`engines.node >= 22`).
+- **React 18 is required.** The package declares `react` and `react-dom` as `^18.2.0` peers.
+
 ## Features
 
 ![Redmine Helpdesk](https://raw.githubusercontent.com/eea/volto-redmine-helpdesk/master/docs/volto-redmine-helpdesk.gif)
