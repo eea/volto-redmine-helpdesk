@@ -1,30 +1,32 @@
 import React from 'react';
-import { render, waitFor, cleanup } from '@testing-library/react';
+import { render, cleanup } from '@testing-library/react';
 import HelpdeskView from './HelpdeskView';
 import { RedmineHelpdeskWidgetFactory } from './widget';
 import Api from '@plone/volto/helpers/Api/Api';
 import { expandToBackendURL } from '@plone/volto/helpers/Url/Url';
 import '@testing-library/jest-dom';
 
-const mockApiGet = jest.fn();
-const mockApiPost = jest.fn();
-const mockWidgetStart = jest.fn();
-
-jest.mock('@eeacms/volto-redmine-helpdesk/captcha/widget', () => ({}));
-
-jest.mock('@plone/volto/helpers/Url/Url', () => ({
-  expandToBackendURL: jest.fn((url) => url),
+const { mockApiGet, mockApiPost, mockWidgetStart } = vi.hoisted(() => ({
+  mockApiGet: vi.fn(),
+  mockApiPost: vi.fn(),
+  mockWidgetStart: vi.fn(),
 }));
 
-jest.mock('@plone/volto/helpers/Api/Api', () =>
-  jest.fn().mockImplementation(() => ({
+vi.mock('@eeacms/volto-redmine-helpdesk/captcha/widget', () => ({}));
+
+vi.mock('@plone/volto/helpers/Url/Url', () => ({
+  expandToBackendURL: vi.fn((url) => url),
+}));
+
+vi.mock('@plone/volto/helpers/Api/Api', () => ({
+  default: vi.fn().mockImplementation(() => ({
     get: mockApiGet,
     post: mockApiPost,
   })),
-);
+}));
 
-jest.mock('./widget', () => ({
-  RedmineHelpdeskWidgetFactory: jest.fn(),
+vi.mock('./widget', () => ({
+  RedmineHelpdeskWidgetFactory: vi.fn(),
 }));
 
 describe('HelpdeskView', () => {
@@ -56,7 +58,7 @@ describe('HelpdeskView', () => {
 
     customFields = {
       children: { tracker_id: { id: 'tracker_id' } },
-      insertBefore: jest.fn(),
+      insertBefore: vi.fn(),
     };
 
     containerSection = {
@@ -65,7 +67,7 @@ describe('HelpdeskView', () => {
         custom_fields: customFields,
         submit_button: { id: 'submit_button' },
       },
-      insertBefore: jest.fn(),
+      insertBefore: vi.fn(),
     };
 
     const formChildren = [
@@ -82,8 +84,8 @@ describe('HelpdeskView', () => {
       subject: subjectField,
       description: descriptionField,
       username: usernameField,
-      insertBefore: jest.fn(),
-      getElementsByClassName: jest.fn((className) => {
+      insertBefore: vi.fn(),
+      getElementsByClassName: vi.fn((className) => {
         if (className === 'close-button') {
           return [closeButton];
         }
@@ -92,7 +94,7 @@ describe('HelpdeskView', () => {
         }
         return [];
       }),
-      querySelector: jest.fn((selector) => {
+      querySelector: vi.fn((selector) => {
         if (selector === '.frc-captcha') {
           return document.querySelector(selector);
         }
@@ -101,8 +103,8 @@ describe('HelpdeskView', () => {
         }
         return null;
       }),
-      setAttribute: jest.fn(),
-      addEventListener: jest.fn((eventName, handler) => {
+      setAttribute: vi.fn(),
+      addEventListener: vi.fn((eventName, handler) => {
         if (eventName === 'submit') {
           submitHandler = handler;
         }
@@ -122,12 +124,12 @@ describe('HelpdeskView', () => {
   };
 
   const runTimer = async () => {
-    jest.advanceTimersByTime(1000);
-    await waitFor(() => expect(mockApiGet).toHaveBeenCalledWith('@captchakey'));
+    await vi.advanceTimersByTimeAsync(1000);
+    expect(mockApiGet).toHaveBeenCalledWith('@captchakey');
   };
 
   beforeEach(() => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
     cleanup();
     submitHandler = null;
     setupForm();
@@ -137,24 +139,29 @@ describe('HelpdeskView', () => {
     mockApiPost.mockReset();
     mockApiPost.mockResolvedValue(JSON.stringify(true));
     mockWidgetStart.mockReset();
+    Api.mockClear();
+    Api.mockImplementation(() => ({
+      get: mockApiGet,
+      post: mockApiPost,
+    }));
 
     mockWidget = {
-      load: jest.fn(),
-      config: jest.fn(),
-      toggle: jest.fn(),
+      load: vi.fn(),
+      config: vi.fn(),
+      toggle: vi.fn(),
       configuration: { project: 'configured-project' },
     };
     RedmineHelpdeskWidgetFactory.mockReset();
     RedmineHelpdeskWidgetFactory.mockReturnValue(mockWidget);
 
     global.window.friendlyChallenge = {
-      WidgetInstance: jest.fn().mockImplementation(() => ({
+      WidgetInstance: vi.fn().mockImplementation(() => ({
         start: mockWidgetStart,
       })),
     };
 
     originalGetElementById = document.getElementById.bind(document);
-    jest.spyOn(document, 'getElementById').mockImplementation((id) => {
+    vi.spyOn(document, 'getElementById').mockImplementation((id) => {
       if (id === 'helpdesk_ticket_container') {
         return helpdeskContainer;
       }
@@ -164,9 +171,9 @@ describe('HelpdeskView', () => {
 
   afterEach(() => {
     cleanup();
-    jest.runOnlyPendingTimers();
-    jest.useRealTimers();
-    jest.restoreAllMocks();
+    vi.runOnlyPendingTimers();
+    vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   it('initializes the widget with default values', () => {
@@ -277,8 +284,8 @@ describe('HelpdeskView', () => {
     expect(submitHandler).toEqual(expect.any(Function));
 
     const event = {
-      preventDefault: jest.fn(),
-      target: { setAttribute: jest.fn() },
+      preventDefault: vi.fn(),
+      target: { setAttribute: vi.fn() },
     };
 
     await expect(submitHandler(event)).resolves.toBe(true);
@@ -307,8 +314,8 @@ describe('HelpdeskView', () => {
     await runTimer();
 
     const event = {
-      preventDefault: jest.fn(),
-      target: { setAttribute: jest.fn() },
+      preventDefault: vi.fn(),
+      target: { setAttribute: vi.fn() },
     };
 
     await expect(submitHandler(event)).resolves.toBe(false);
@@ -316,7 +323,7 @@ describe('HelpdeskView', () => {
   });
 
   it('clears the delayed setup timer on unmount', () => {
-    const clearTimeoutSpy = jest.spyOn(global, 'clearTimeout');
+    const clearTimeoutSpy = vi.spyOn(global, 'clearTimeout');
     const view = renderView();
 
     view.unmount();

@@ -1,11 +1,13 @@
+import { vi } from 'vitest';
 import { RedmineHelpdeskWidgetFactory } from './widget';
 import load_formExt from './helpdesk_widget/load_form.pro';
 import { fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
-jest.mock('./helpdesk_widget/load_form.pro', () => {
-  return {};
+vi.mock('./helpdesk_widget/load_form.pro', () => {
+  return { default: '/helpdesk_widget/load_form' };
 });
+vi.mock('./helpdesk_widget/widgetcss.pro', () => ({ default: '' }));
 describe('RedmineHelpdeskWidgetFactory', () => {
   let api;
   let widgetButton;
@@ -19,8 +21,8 @@ describe('RedmineHelpdeskWidgetFactory', () => {
   let mockCustomDiv;
   let mockTarget;
   let mockXHR = {
-    open: jest.fn(),
-    send: jest.fn(),
+    open: vi.fn(),
+    send: vi.fn(),
     readyState: 4,
     response: {
       projects: {
@@ -31,11 +33,12 @@ describe('RedmineHelpdeskWidgetFactory', () => {
       },
     },
     status: 200,
-    setRequestHeader: jest.fn(),
-    onreadystatechange: jest.fn(),
+    setRequestHeader: vi.fn(),
+    onreadystatechange: vi.fn(),
   };
 
   beforeEach(() => {
+    vi.useFakeTimers();
     document.body.innerHTML = '<div id="helpdesk_widget"></div>';
     widgetButton = document.createElement('button');
     widgetButton.id = 'widget_button';
@@ -44,21 +47,21 @@ describe('RedmineHelpdeskWidgetFactory', () => {
     api = RedmineHelpdeskWidgetFactory({
       widget_button: widgetButton,
     });
-    mockAppendChild = jest
+    mockAppendChild = vi
       .spyOn(document.head, 'appendChild')
       .mockImplementation(() => {});
-    window.XMLHttpRequest = jest.fn(() => mockXHR);
+    window.XMLHttpRequest = vi.fn(() => mockXHR);
     target = document.createElement('div');
     document.body.appendChild(target);
     mockFileReader = {
-      readAsDataURL: jest.fn(),
+      readAsDataURL: vi.fn(),
       onload: null,
     };
 
     mockFile = new Blob(['file content'], { type: 'text/plain' });
 
     // Mock FileReader constructor
-    window.FileReader = jest.fn(() => mockFileReader);
+    window.FileReader = vi.fn(() => mockFileReader);
     mockAttachment = {
       attributes: {
         'data-max-size': 5000,
@@ -71,7 +74,7 @@ describe('RedmineHelpdeskWidgetFactory', () => {
       ],
     };
     mockForm = {
-      getElementsByClassName: jest.fn((className) => {
+      getElementsByClassName: vi.fn((className) => {
         if (className === 'attach_field') {
           return [
             {
@@ -93,7 +96,9 @@ describe('RedmineHelpdeskWidgetFactory', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllTimers();
+    vi.useRealTimers();
+    vi.clearAllMocks();
     document.body.removeChild(target);
   });
 
@@ -340,7 +345,7 @@ describe('RedmineHelpdeskWidgetFactory', () => {
       contentWindow: {
         document: {
           body: {
-            appendChild: jest.fn(),
+            appendChild: vi.fn(),
           },
         },
       },
@@ -498,7 +503,7 @@ describe('RedmineHelpdeskWidgetFactory', () => {
   });
 
   it('should call appendToIframe after a timeout', () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
     api.schema = {
       projects: {
         project1: 'project1',
@@ -520,7 +525,7 @@ describe('RedmineHelpdeskWidgetFactory', () => {
 
     api.fill_form();
 
-    jest.advanceTimersByTime(1);
+    vi.advanceTimersByTime(1);
   });
 
   it('should apply avatar when avatar exists and request is successful', () => {
@@ -633,6 +638,7 @@ describe('RedmineHelpdeskWidgetFactory', () => {
   });
 
   it('should append scripts to iframe head', () => {
+    const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
     api.configuration = { base_url: 'http://example.com' };
     api.iframe = {
       contentWindow: {
@@ -645,9 +651,9 @@ describe('RedmineHelpdeskWidgetFactory', () => {
     };
     api.append_scripts();
 
-    expect(setTimeout).toHaveBeenCalledTimes(1);
+    expect(setTimeoutSpy).toHaveBeenCalledTimes(1);
 
-    jest.runAllTimers();
+    vi.runAllTimers();
 
     expect(mockAppendChild).toHaveBeenCalledTimes(2);
 
@@ -665,6 +671,7 @@ describe('RedmineHelpdeskWidgetFactory', () => {
         JSON.stringify(api.configuration) +
         '}',
     );
+    setTimeoutSpy.mockRestore();
   });
 
   it('should create and append title div if title is provided', () => {
@@ -695,7 +702,7 @@ describe('RedmineHelpdeskWidgetFactory', () => {
   it('should create and append container div and its children', () => {
     api.form = {
       appendChild: mockAppendChild,
-      getElementsByClassName: jest.fn(() => [{ remove: jest.fn() }]),
+      getElementsByClassName: vi.fn(() => [{ remove: vi.fn() }]),
     };
     api.schema = {
       projects_data: {
@@ -710,12 +717,12 @@ describe('RedmineHelpdeskWidgetFactory', () => {
       privacyPolicy: 'https://example.com/privacy-policy',
     };
 
-    api.create_form_hidden = jest.fn();
-    api.create_form_select = jest.fn();
-    api.load_custom_fields = jest.fn();
-    api.create_form_submit = jest.fn();
-    api.create_attch_link = jest.fn();
-    api.create_form_privacy_policy = jest.fn();
+    api.create_form_hidden = vi.fn();
+    api.create_form_select = vi.fn();
+    api.load_custom_fields = vi.fn();
+    api.create_form_submit = vi.fn();
+    api.create_attch_link = vi.fn();
+    api.create_form_privacy_policy = vi.fn();
 
     api.load_project_data(1, 2);
 
@@ -731,7 +738,7 @@ describe('RedmineHelpdeskWidgetFactory', () => {
   it('should not create hidden tracker_id if tracker is not in schema', () => {
     api.form = {
       appendChild: mockAppendChild,
-      getElementsByClassName: jest.fn(() => [{ remove: jest.fn() }]),
+      getElementsByClassName: vi.fn(() => [{ remove: vi.fn() }]),
     };
     api.schema = {
       projects_data: {
@@ -746,11 +753,11 @@ describe('RedmineHelpdeskWidgetFactory', () => {
       privacyPolicy: 'https://example.com/privacy-policy',
     };
 
-    api.create_form_hidden = jest.fn();
-    api.load_custom_fields = jest.fn();
-    api.create_form_submit = jest.fn();
-    api.create_attch_link = jest.fn();
-    api.create_form_privacy_policy = jest.fn();
+    api.create_form_hidden = vi.fn();
+    api.load_custom_fields = vi.fn();
+    api.create_form_submit = vi.fn();
+    api.create_attch_link = vi.fn();
+    api.create_form_privacy_policy = vi.fn();
 
     api.load_project_data(1, 2);
 
@@ -765,8 +772,8 @@ describe('RedmineHelpdeskWidgetFactory', () => {
 
   it('should call load_project_data with correct project_id and tracker_id', () => {
     api.form = {
-      getElementsByClassName: jest.fn(),
-      appendChild: jest.fn(),
+      getElementsByClassName: vi.fn(),
+      appendChild: vi.fn(),
     };
     api.configuration = {
       redmineProjectId: null,
@@ -788,8 +795,8 @@ describe('RedmineHelpdeskWidgetFactory', () => {
     };
 
     const mockContainerDiv = {
-      getElementsByClassName: jest.fn(),
-      remove: jest.fn(),
+      getElementsByClassName: vi.fn(),
+      remove: vi.fn(),
     };
 
     mockContainerDiv.getElementsByClassName.mockReturnValue([
@@ -810,8 +817,8 @@ describe('RedmineHelpdeskWidgetFactory', () => {
       privacyPolicy: 'https://example.com/privacy-policy',
     };
     api.form = {
-      getElementsByClassName: jest.fn(),
-      appendChild: jest.fn(),
+      getElementsByClassName: vi.fn(),
+      appendChild: vi.fn(),
     };
     api.schema = {
       projects_data: {
@@ -827,8 +834,8 @@ describe('RedmineHelpdeskWidgetFactory', () => {
     };
 
     const mockContainerDiv = {
-      getElementsByClassName: jest.fn(),
-      remove: jest.fn(),
+      getElementsByClassName: vi.fn(),
+      remove: vi.fn(),
     };
 
     mockContainerDiv.getElementsByClassName.mockReturnValue([
@@ -905,7 +912,7 @@ describe('RedmineHelpdeskWidgetFactory', () => {
 
   it('should set the title attribute from translation', () => {
     const title = 'Click to submit';
-    api.translation = jest.fn(() => title);
+    api.translation = vi.fn(() => title);
 
     api.create_form_submit(target, 'Submit');
     const submitButton = target.querySelector('#form-submit-btn');
@@ -1028,8 +1035,8 @@ describe('RedmineHelpdeskWidgetFactory', () => {
 
   it('should set the attachment link label from translation if available', () => {
     api.configuration = { attachment: true };
-    api.translation = jest.fn().mockReturnValue('Attach your file');
-    const mockReadFile = jest.fn((file, callback) => {
+    api.translation = vi.fn().mockReturnValue('Attach your file');
+    const mockReadFile = vi.fn((file, callback) => {
       const e = { target: { result: 'fileContent' } };
       callback(e);
     });
@@ -1043,7 +1050,7 @@ describe('RedmineHelpdeskWidgetFactory', () => {
   it('should call read_file if file size is within limit', () => {
     api.attachment = mockAttachment;
     api.form = mockForm;
-    mockReadFile = jest.fn();
+    mockReadFile = vi.fn();
     api.read_file = mockReadFile;
     api.upload_file();
     expect(mockReadFile).toHaveBeenCalledWith(
@@ -1055,7 +1062,7 @@ describe('RedmineHelpdeskWidgetFactory', () => {
   it('should not call read_file if file size exceeds limit', () => {
     api.attachment = mockAttachment;
     api.form = mockForm;
-    mockReadFile = jest.fn();
+    mockReadFile = vi.fn();
     api.read_file = mockReadFile;
     mockAttachment.files[0].size = 6000;
     api.upload_file();
@@ -1074,7 +1081,7 @@ describe('RedmineHelpdeskWidgetFactory', () => {
   });
 
   it('should read file as Data URL', () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
 
     api.read_file(mockFile, callback);
 
@@ -1082,7 +1089,7 @@ describe('RedmineHelpdeskWidgetFactory', () => {
   });
 
   it('should call the callback when file is loaded', () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     const mockEvent = { target: { result: 'fileContent' } };
 
     api.read_file(mockFile, callback);
@@ -1098,7 +1105,7 @@ describe('RedmineHelpdeskWidgetFactory', () => {
       innerHTML: '',
     };
     mockTarget = {
-      appendChild: jest.fn(),
+      appendChild: vi.fn(),
     };
 
     xmlhttp.onreadystatechange = function () {
@@ -1124,10 +1131,10 @@ describe('RedmineHelpdeskWidgetFactory', () => {
       innerHTML: '',
     };
     mockTarget = {
-      appendChild: jest.fn(),
+      appendChild: vi.fn(),
     };
 
-    jest.useFakeTimers();
+    vi.useFakeTimers();
     const xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
       if (xmlhttp.readyState === 4) {
@@ -1142,13 +1149,13 @@ describe('RedmineHelpdeskWidgetFactory', () => {
       }
     };
     xmlhttp.onreadystatechange();
-    jest.advanceTimersByTime(100);
+    vi.advanceTimersByTime(100);
     // expect(mockArrangeIframe).toHaveBeenCalled();
   });
 
   it('should set custom values for select fields', () => {
     const mockForm = {
-      querySelector: jest.fn(() => {}),
+      querySelector: vi.fn(() => {}),
     };
     api.configuration = {
       identify: {
